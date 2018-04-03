@@ -7,6 +7,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" type="text/css" />
+<script src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"
+	type="text/javascript">
+	
+</script>
 <title>部门管理</title>
 <script language=JavaScript>
 function sousuo(){
@@ -52,8 +56,13 @@ function dosubmit(pageNo){
     document.getElementById("fom").submit();//通过js手动提交
  }
 function doGo(){
-    document.getElementById("page").value = document.getElementById("jump").value;
+   var regx=/^[0-9]*$/;
+if($("#jump").val()!=""&&regx.test($("#jump").val())){
+  document.getElementById("page").value =$("#jump").val();
     document.getElementById("fom").submit();//通过js手动提交
+}else {
+   alert("请输入将要跳转的页数且必须为数字！！！");
+     }
 }
 </script>
 <style type="text/css">

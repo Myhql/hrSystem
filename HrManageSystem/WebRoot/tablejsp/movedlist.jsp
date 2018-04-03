@@ -16,8 +16,13 @@
 </script>
 <script>
 	function dosubmit(pageno) {
-		document.getElementById("page").value = pageno;
-		document.getElementById("fom").submit();
+	 var regx=/^[0-9]*$/;
+if(pageno!=""&&regx.test(pageno)){
+  document.getElementById("page").value =pageno;
+    document.getElementById("fom").submit();//通过js手动提交
+}else {
+   alert("请输入将要跳转的页数且必须为数字！！！");
+     }
 	}
 </script>
 </head>

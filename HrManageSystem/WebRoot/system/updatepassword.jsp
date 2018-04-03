@@ -51,6 +51,7 @@ $("#form").submit(function() {
 			})	
 
 function check() {
+  var regex = /^[0-9A-Za-z]{6,12}$/ ;
          if($("#pass").val()== ""){
 			 alert("原密码不能为空！！");
 				return false;
@@ -60,6 +61,9 @@ function check() {
 			}else if($("#conpass").val()!=$("#confirmpassword").val()){
 			 alert("密码输入不一致，请重新输入！！");
 				return false;
+			}else if(!regex.test($("#pass").val())){
+			alert("密码必须是字母和数字且长度在6-12！！");
+			return false;
 			}
 			return true;
 

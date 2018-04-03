@@ -36,20 +36,29 @@ public class ManagerController {
 	
 	@RequestMapping("/login")
 	public ModelAndView login(String username,String userpassword,HttpSession session){
-		ModelAndView mv = new ModelAndView();
-		
-		//账号密码都不为空,则从数据库查询是否有改用户
-		Manager loginManager = managerService.login(username,userpassword);
-		//如果用户不为空
-		if(loginManager != null){
-			//保存用户信息到session中,并返回系统首页
-			session.setAttribute("username", username);
-			mv.setViewName("index.jsp");
+		ModelAndView mv = new ModelAndView();		
+		List<Manager> listname= managerService.checkAccount(username);
+		if(listname!=null&&listname.size()>0){
+			if(!listname.get(0).getPass().equals(userpassword)){
+				mv.addObject("msg", "密码不正确，请重新输入！！");
+				mv.setViewName("login.jsp");
+				return mv;	
+			}else{
+				Manager loginManager = managerService.login(username,userpassword);
+				if(loginManager != null){
+					session.setAttribute("username", username);
+					mv.setViewName("index.jsp");
+				}else{
+					mv.addObject("msg", "用户名或密码不正确,请重新登录！！！");
+					mv.setViewName("login.jsp");
+				}
+			}
+			
 		}else{
-			//用户为空,返回错误信息和登录页面
-			mv.addObject("msg", "用户名或密码不正确,请重新登录！！！");
+			mv.addObject("msg", "用户名不正确，请重新输入！！");
 			mv.setViewName("login.jsp");
-		}
+			return mv;
+		}	
 		
 		//返回 ModelAndView
 		return mv;
@@ -108,7 +117,6 @@ public class ManagerController {
 		if(name != null){
 		   managerEmp.setName(name);
 		}
-		System.out.println(managerEmp.getEmpid());
 		ModelAndView mv = new ModelAndView();
 		List<ManagerRecord> managersList = managerService.selectManagers(pageNo, PAGESIZE, managerEmp);
 		if(managersList!=null&&managersList.size()>0){
@@ -143,9 +151,23 @@ public class ManagerController {
 
 	@RequestMapping("/updateManager")
 	public String updateManager(Manager manager){
-		//Manager manager = managerService.selectManagerById(managerid);
-		managerService.updateManager(manager);
-		return "system/updateOK.jsp";
+		Manager managerId=managerService.selectManagerById(manager.getManagerid());
+		if(managerId!=null){
+			if(!managerId.getAccount().equals(manager.getAccount())){
+				int temp= managerService.checkaddname(manager.getAccount());
+				if(temp==1){
+					return "redirect:/system/updatefail.jsp";
+				}else{
+					managerService.updateManager(manager);;
+					return "system/updateOK.jsp";
+				}
+			}else {
+				managerService.updateManager(manager);;
+				return "system/updateOK.jsp";
+			}	
+		}else{
+			return null;
+		}		
 	}
 
 	@RequestMapping("/out")
@@ -174,10 +196,6 @@ public class ManagerController {
 		managerService.updateManager(listname.get(0));
 		return "system/updatepasssuccess.jsp";
 	}
-	
-	
-	
-
 }
 
 

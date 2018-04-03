@@ -27,8 +27,13 @@ function dosubmit(pageNo){
 	      document.getElementById("fom").submit();//通过js手动提交
 	   }
 function doGo(){
-          document.getElementById("page").value = document.getElementById("jump").value;
-          document.getElementById("fom").submit();//通过js手动提交
+ var regx=/^[0-9]*$/;
+if($("#jump").val()!=""&&regx.test($("#jump").val())){
+  document.getElementById("page").value =$("#jump").val();
+    document.getElementById("fom").submit();//通过js手动提交
+}else {
+   alert("请输入将要跳转的页数且必须为数字！！！");
+     }
  }
  
  
@@ -114,7 +119,7 @@ function GetQueryString(name) {
    }  
    var updateFlag = GetQueryString("updateFlag");
    if(updateFlag=='0'){
-      alert("修改失败!!!");
+      alert("修改失败,改部门已经存在!!!");
    }else if(updateFlag=='1'){
       alert("修改成功!!!");
    }

@@ -34,11 +34,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           <td class="CPanel">
           <table width="95%" border="0" align="center" cellpadding="4" cellspacing="1" bgcolor="#464646" class="newfont03">
             <tr class="CTitle" >
-            <td height="22" colspan="11" align="center" style="font-size:16px"><h3>添加失败，用户名或者员工Id已经存在，请更换！！！</h3></td>
+            <td height="22" colspan="11" align="center" style="font-size:16px"><h3>添加失败，用户名已经存在，请更换！！！</h3></td>
 			</tr>
 			<tr>
 			<td align="center">   
-				<input type="button" name="cancel" onclick="javascript:history.back(-1);" value="重新注册"  />
+				<input type="button" name="cancel" onclick="javascript:history.back(-1);" value="重新修改"  />
 			</td>
 			</tr>
 			</table></td>

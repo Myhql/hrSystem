@@ -22,7 +22,7 @@ $(function(){
 							var url = "${pageContext.request.contextPath}/managers/checkname";
 							var params = {
 								id : $("#accountId").val()
-							}
+							};
 							$.getJSON(url,params,function(jobList) {
 							$.each(jobList,function(i, manager) {
 							   alert("该 "+manager.account+" 已經存在，请更换輸入!!!!");
@@ -38,39 +38,54 @@ $(function(){
 			}else{
 			     return false;
 			}
-			})
+			});
 
 
 
 
 function validate(){
-  var regex = /^[0-9A-Za-z]{6,12}$/ ;
-	var name = document.form1.name.value;
+  var regex =/^(?!(?:\d+|[a-zA-Z]+)$)[\da-zA-Z]{6,12}$/;
+	var name = $("#accountId").val();
+	var pass =$("#pass").val();
+	var confirmpass = $("#conpass").val();;
 	if(name == ''){
 		alert("请输入用户名！");
 		return false;
 		}
-//-----
-	var pass = document.form1.pass.value;
-	var confirmpass = document.form1.confirmpassword.value;
-	if(pass == ''){
+	else if(pass == ''){
 		alert("请输入新密码！");
 		return false;
 		}
-	if(!regex.test(pass)){
-			alert("密码必须是字母和数字且长度在6-12！！");
+	else if(!regex.test(pass)){
+		alert("密码必须是字母和数字且长度在6-12！！");
 		return false;	
 	}	
-	if(confirmpass == ''){
+	else if(confirmpass == ''){
 		alert("请确认密码！");
 		return false;
 		}
-	if(pass != confirmpass){
+	else if(pass != confirmpass){
 		alert("两次密码输入不一致!");
 		return false;
 		}
+		return true;
 
 }
+
+$("#tele").blur(function(){
+            var reg=/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/; 
+            var mobile = $("#tele").val();
+              if(mobile!=''){
+               if(!reg.exec(mobile))
+            {
+                alert("联系电话有误，请重新填写:"+mobile);
+            }
+              }
+           
+
+        });	
+
+
 })
 </script>
 <style type="text/css">
@@ -106,13 +121,14 @@ function validate(){
               <tr bgcolor="#FFFFFF">
                     <td ><div align="center">${managerDetail.managerid}</div></td>
                     <td ><div align="center"><input name="account" type="text" value="${managerDetail.account}" size="15" id="accountId"/></div></td>
-					<td><div align="center"><input name="pass" type="text" value="${managerDetail.pass}" size="15" /></div></td>
-					<td><div align="center"><input name="confirmpassword" type="text" value="${managerDetail.pass}" size="15" /></div></td>
-                    <td><div align="center"><input name="tele" type="text" value="${managerDetail.tele}" size="15" /></div></td>
+					<td><div align="center"><input name="pass" type="password" value="${managerDetail.pass}" size="15" id="pass"/></div></td>
+					<td><div align="center"><input name="confirmpassword" type="password" value="${managerDetail.pass}" size="15" id="conpass"/></div></td>
+                    <td><div align="center"><input name="tele" type="text" value="${managerDetail.tele}" size="15" id="tele" /></div></td>
                    <td align="center"><div align="center">
                     <label>
                   <input type="submit" name="Submit" value="修改" />
                   </label>
+                  &nbsp;&nbsp;
                     <label>
                     <input type="reset" name="Submit2" onclick="javascript:history.go(-1)" value="返回" />
                     </label>

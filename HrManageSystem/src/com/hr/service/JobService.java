@@ -2,6 +2,7 @@ package com.hr.service;
 
 import java.util.List;
 
+import com.hr.entity.Dept;
 import com.hr.entity.Job;
 import com.hr.entity.Staff;
 
@@ -22,4 +23,5 @@ public interface JobService {
 	public int findAllEmpCountFromJob(int jobid);
 
 	public List<Job> checkjobname(String name);
+	public Job selectManagerById(Integer jobtid);
 }

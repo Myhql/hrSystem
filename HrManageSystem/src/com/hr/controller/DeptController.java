@@ -53,11 +53,11 @@ public class DeptController {
 	public String addDept(Dept dept){
 	int temp=deptService.checkaddname(dept.getName());
 	if(temp==1){
-		return "organization/failure.jsp";//添加失败
+		return "organization/deptaddfail.jsp";//添加失败
 	}else{
 		int row = deptService.addDept(dept);
 		if(row == 0){
-			return "organization/failure.jsp";//添加失败
+			return "organization/deptaddfail.jsp";//添加失败
 		}else{
 			return "redirect:/dept/findAllDeptByPage/1";
 		}
@@ -84,14 +84,25 @@ public class DeptController {
 	//更新部门信息
 	@RequestMapping("/updateDept")
 	public String updateDept(Dept dept,int pageNo){
-		int flag = deptService.updateDept(dept);
-		if(flag == 0){//更新失败
-			//return "organization/failure.jsp";
-			return "redirect:/dept/findAllDeptByPage/1?pageNo="+pageNo+"&updateFlag=0";
-		}else{//更新成功
-			//return "organization/success.jsp";
-			return "redirect:/dept/findAllDeptByPage/1?pageNo="+pageNo+"&updateFlag=1";
+	Dept deptId=deptService.selectManagerById(dept.getDeptid());
+		if(deptId!=null){
+			if(!deptId.getName().equals(dept.getName())){
+				int temp=deptService.checkaddname(dept.getName());
+				if(temp==1){
+		        return "redirect:/dept/findAllDeptByPage/1?pageNo="+pageNo+"&updateFlag=0";	
+				}else{
+					deptService.updateDept(dept);
+					 return "redirect:/dept/findAllDeptByPage/1?pageNo="+pageNo+"&updateFlag=1";	
+				}
+			
+			}else{
+				deptService.updateDept(dept);
+				 return "redirect:/dept/findAllDeptByPage/1?pageNo="+pageNo+"&updateFlag=1";		
+			}
+		}else{
+			return null;
 		}
+		
 	}
 	//删除部门
 	@RequestMapping("/deleteDept/{deptid}/{pageNo}")

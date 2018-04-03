@@ -62,7 +62,7 @@ $(function(){
 						
 						
 		function check() {	
-		  var regex = /^[0-9A-Za-z]{6,12}$/ ;	
+		  var regex = /^(?!(?:\d+|[a-zA-Z]+)$)[\da-zA-Z]{6,12}$/ ;	
 			if ($("#accountId").val() == "") {
 				alert("管理员不能为空！！！！");
 				return false;
@@ -92,7 +92,7 @@ $(function(){
 
 		}
 	$("#tele").blur(function(){
-            var reg=/^1[3|4|5|7|8][0-9]\d{4,8}$/; 
+            var reg=/^((1[3,5,8][0-9])|(14[5,7])|(17[0,6,7,8])|(19[7]))\d{8}$/; 
             var mobile = $("#tele").val();
               if(mobile!=''){
                if(!reg.exec(mobile))
@@ -102,7 +102,7 @@ $(function(){
               }
            
 
-        })					
+        });					
 										
 window.onload = function(){
 	var res = GetQueryString("res");

@@ -33,6 +33,9 @@
 		        	<if test="empid!=null and empid!=''">     
 		            	and manager.empid = #{empid}     
 		        	</if>
+		        	<if test="account!=null and account!=''">     
+		            	and manager.account = #{account}     
+		        	</if>
 		       </where> 
 	</select>
 </mapper>

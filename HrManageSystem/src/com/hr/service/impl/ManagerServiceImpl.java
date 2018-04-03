@@ -37,7 +37,6 @@ public class ManagerServiceImpl implements ManagerService {
 		criteria.andAccountEqualTo(username);
 		criteria.andPassEqualTo(userpassword);
 		List<Manager> list = managerMapper.selectByExample(example);
-		System.out.println(list.size());
 		if(list != null && list.size() > 0){
 			return list.get(0);
 		}else{
@@ -82,7 +81,6 @@ public class ManagerServiceImpl implements ManagerService {
 		PageHelper.startPage(pageNo,pagesize);
 		String name = manageremp.getName();
 		manageremp.setName(name);
-		System.out.println("adszsdfgfdsgfsdgfdsgfdsgfdsgdsgsdgdsfgfas"+manageremp.getName());
 		return managerCustomMapper.selectManagers(manageremp);
 	}
 
@@ -91,8 +89,7 @@ public class ManagerServiceImpl implements ManagerService {
 	}
 
 	public Manager selectManagerById(Integer managerid) {
-		Manager manager = managerMapper.selectByPrimaryKey(managerid);
-		return null;
+		return managerMapper.selectByPrimaryKey(managerid);
 	}
 
 	public void deteleById(Integer managerid) {

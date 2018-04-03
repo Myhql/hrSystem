@@ -18,6 +18,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="description" content="This is my page">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" type="text/css" />
 <title>管理区域</title>
+<script src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"
+	type="text/javascript">
+	
+</script>
 <script>
 function makeSure(){
 	if(!window.confirm("是否删除管理员？")){
@@ -30,8 +34,14 @@ function dosubmit(pageNo){
     document.getElementById("fom").submit();//通过js手动提交
  }
 function doGo(){
-    document.getElementById("page").value = document.getElementById("jump").value;
+var regx=/^[0-9]*$/;
+if($("#jump").val()!=""&&regx.test($("#jump").val())){
+  document.getElementById("page").value =$("#jump").val();
     document.getElementById("fom").submit();//通过js手动提交
+}else {
+   alert("请输入将要跳转的页数且必须为数字！！！");
+     }
+  
 }
 
 </script>
@@ -119,7 +129,7 @@ function doGo(){
                 <td width="5%"><table width="20" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                       <td width="1%"><input id="jump" name="textfield3" type="text" class="right-textfield03" size="3" /></td>
-                      <td width="87%"><input name="Submit23222" type="button" class="button08" value="跳转" onclick="doGo()"/>
+                      <td width="87%"><input name="Submit23222" type="button" class="button08" value="跳转"  onclick="doGo()" />
                       </td>
                     </tr>
                 </table></td>

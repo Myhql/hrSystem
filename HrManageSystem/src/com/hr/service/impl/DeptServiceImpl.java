@@ -66,8 +66,8 @@ public class DeptServiceImpl implements DeptService {
 		return dept;
 	}
 
-	public int updateDept(Dept dept) {
-       return deptMapper.updateByPrimaryKey(dept);		
+	public void updateDept(Dept dept) {
+        deptMapper.updateByPrimaryKey(dept);		
 	}
 
 	public boolean deleteDept(int deptid){
@@ -153,6 +153,11 @@ public class DeptServiceImpl implements DeptService {
 			}
 			
 				}
+
+	public Dept selectManagerById(Integer deptid) {
+		
+		return deptMapper.selectByPrimaryKey(deptid);
+	}
 		
 		
 		

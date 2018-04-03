@@ -3,6 +3,7 @@ package com.hr.service;
 import java.util.List;
 
 import com.hr.entity.Dept;
+import com.hr.entity.Manager;
 import com.hr.entity.Staff;
 
 public interface DeptService {
@@ -15,7 +16,7 @@ public interface DeptService {
 
 	public Dept findDeptById(int deptid);
 
-	public int updateDept(Dept dept);
+	public void updateDept(Dept dept);
 	
 	public boolean deleteDept(int deptid);
 
@@ -23,9 +24,7 @@ public interface DeptService {
 
 	public int findAllEmpCountFromDept(int deptid);//查询该部门下的员工人数
 	public List<Dept> checkname(String name);
-
+	public Dept selectManagerById(Integer deptid);
 	public int checkaddname(String name);
-	//public Dept findDeptBySuperid(Integer superid);
-
-	/*public List<Staff> findAllStaffByDeptId(int deptid);*/
+	
 }

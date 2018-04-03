@@ -41,14 +41,18 @@ public class JobController {
 	//添加岗位
 	@RequestMapping("/addJob")
 	public String addJob(Job job){
+		List<Job> temp=jobService.checkjobname(job.getJobname());
+		if(temp!=null&&temp.size()>0){
+			return "organization/jobaddfail.jsp";//添加失败
+		}else{
 		int row = jobService.addJob(job);
 		if(row == 0){
-			return "organization/failure.jsp";//添加失败
+			return "organization/jobaddfail.jsp";//添加失败
 		}else{
 			return "redirect:/job/findAllJobByPage/1";
 		}
 	}
-	
+	}
 	//分页查询所有的岗位  当pageNum不等于1时，将pageNum赋值给pageNo
 	@RequestMapping("/findAllJobByPage/{pageNum}")
 	public ModelAndView findAllJobByPage(
@@ -86,12 +90,24 @@ public class JobController {
 	//更新
 	@RequestMapping("/updateJob")
 	public String updateJob(Job job,int pageNo){
-		int flag = jobService.updateJob(job);
-		 if(flag==0){//更新失败
-			 return "redirect:/job/findAllJobByPage/1?pageNo="+pageNo+"&updateFlag=0";
-		 }else{//更新成功
-			 return "redirect:/job/findAllJobByPage/1?pageNo="+pageNo+"&updateFlag=1";
-		 }
+		Job jobId=jobService.selectManagerById(job.getJobid());
+		if(jobId!=null){
+			if(!jobId.getJobname().equals(job.getJobname())){
+				List<Job> temp=jobService.checkjobname(job.getJobname());
+				if(temp!=null&&temp.size()>0){
+					 return "redirect:/job/findAllJobByPage/1?pageNo="+pageNo+"&updateFlag=0";
+				}else{
+					jobService.updateJob(job);
+					 return "redirect:/job/findAllJobByPage/1?pageNo="+pageNo+"&updateFlag=1";	
+				}
+			
+			}else{
+				jobService.updateJob(job);
+				 return "redirect:/job/findAllJobByPage/1?pageNo="+pageNo+"&updateFlag=1";		
+			}
+		}else{
+			return null;
+		}
 	}
 	
 	//删除

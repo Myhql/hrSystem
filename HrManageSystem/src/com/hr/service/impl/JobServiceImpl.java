@@ -127,4 +127,9 @@ public class JobServiceImpl implements JobService {
 		}
 	}
 
+
+	public Job selectManagerById(Integer jobtid) {
+	   return	jobMapper.selectByPrimaryKey(jobtid);
+	}
+
 }

@@ -17,29 +17,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="description" content="This is my page">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/common.css" type="text/css" />
 <title>管理区域</title>
+<script src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"
+	type="text/javascript">
+	
+</script>
 <script language="javascript">
 
-//---
-function cancle(){
-	location.href("test.html");
-	return false;
-	}
+
+
 function validate(){
-	var no = document.form1.managerid.value;
-	var name = document.form1.name.value;
-	var empid = document.form1.empid.value;
-	                                                                                                  
-	if(no == '' && name == '' && empid == ''){                                                                                                                            
+	if($("#managerId").val() == ''&& $("#nameId").val() == '' && $("#empId").val() == ''&& $("#acconutId").val()==''){                                                                                                                            
 		alert("请输入任意查询条件");
-		return false;  }
+		return false; 
+		 }
 		else if(isNaN(empid)){
 		alert("员工编号必须为数字！！！");
 		return false;
 		} else if(isNaN(no)){
 		alert("用户编号必须为数字！！！");
 		return false;
-		}                                                                                                                        
+		} 
+		return true;                                                                                                                  
 		}
+
 </script>
 <style type="text/css">
 body {
@@ -68,25 +68,31 @@ body {
                 <td height="22" colspan="8" align="center" style="font-size:16px">查询管理员基本信息</td>
               </tr>
               <tr bgcolor="#EEEEEE">
-                <td height="30" width="180" align="center"><div align="center">请输入管理员编号：</div></td>
-                <td width="180"><div align="center">请输入管理员姓名：</div></td>
+                <td height="30" width="180" align="center"><div align="center">请输入管理员(员工)姓名：</div></td>
+                <td width="180"><div align="center">请输入管理员编号：</div></td>
+                 <td width="180"><div align="center">请输入管理员账号：</div></td>
                 <td width="180"><div align="center">请输入员工编号：</div></td>
                 <td width="240"><div align="center">操作</div></td>
               </tr>
               <tr bgcolor="#FFFFFF">
                 <td height="40" align="center"><div align="center">
                     <label>
-                    <input name="managerid" type="text" size="14" />
+                    <input name="name" type="text" size="14" id="nameId"/>
                     </label>
                 </div></td>
                 <td><div align="center">
                   <label>
-                  <input name="name" type="text" value="" size="14" />
+                  <input name="managerid" type="text" value="" size="14" id="managerId"/>
+                  </label>
+                </div></td>
+                  <td><div align="center">
+                  <label>
+                  <input name="account" type="text" value="" size="14" id="accountId" />
                   </label>
                 </div></td>
                 <td><div align="center">
                     <label>
-                    <input name="empid" type="text" value="" size="14" />
+                    <input name="empid" type="text" value="" size="14" id="empId" />
                     </label>
                 </div></td>
                 
