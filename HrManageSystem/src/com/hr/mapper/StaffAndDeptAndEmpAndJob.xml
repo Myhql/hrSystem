@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.StaffAndDeptAndEmpAndJob">
+	<resultMap id="StaffAndEmpAndJobAndDept" type="com.hr.entity.Staff">
+		<id column="STAFFID" property="staffid" jdbcType="DECIMAL" />
+		<result column="EMPID" property="empid" jdbcType="DECIMAL" />
+		<result column="JOBID" property="jobid" jdbcType="DECIMAL" />
+		<result column="TIME" property="time" jdbcType="DATE" />
+		<result column="SOURCE" property="source" jdbcType="VARCHAR" />
+		<!-- 对员工表的映射 -->
+		<association property="emp" javaType="com.hr.entity.Emp">
+			<id column="EMPID" property="empid" jdbcType="DECIMAL" />
+			<result column="NAME" property="name" jdbcType="VARCHAR" />
+			<result column="SEX" property="sex" jdbcType="VARCHAR" />
+			<result column="BIR" property="bir" jdbcType="DATE" />
+			<result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+			<result column="TOWORKTIME" property="toworktime" jdbcType="DATE" />
+			<result column="ZZMM" property="zzmm" jdbcType="VARCHAR" />
+			<result column="NATIONAL" property="national" jdbcType="VARCHAR" />
+			<result column="NATIVES" property="natives" jdbcType="VARCHAR" />
+			<result column="TELE" property="tele" jdbcType="VARCHAR" />
+			<result column="MAIL" property="mail" jdbcType="VARCHAR" />
+			<result column="HEIGHT" property="height" jdbcType="VARCHAR" />
+			<result column="BLOODTYPE" property="bloodtype" jdbcType="VARCHAR" />
+			<result column="BIRTHPLACE" property="birthplace" jdbcType="VARCHAR" />
+			<result column="HKPLACE" property="hkplace" jdbcType="VARCHAR" />
+			<result column="XL" property="xl" jdbcType="VARCHAR" />
+			<result column="DEGREE" property="degree" jdbcType="VARCHAR" />
+			<result column="GRADUATESCHOOL" property="graduateschool"
+				jdbcType="VARCHAR" />
+			<result column="PROFESSIONAL" property="professional"
+				jdbcType="VARCHAR" />
+			<result column="GRADUATETIME" property="graduatetime"
+				jdbcType="DATE" />
+		</association>
+		<!-- 对岗位表的映射 -->
+		<association property="job" javaType="com.hr.entity.Job">
+			<id column="JOBID" property="jobid" jdbcType="DECIMAL" />
+			<result column="JOBNAME" property="jobname" jdbcType="VARCHAR" />
+			<result column="JOBTYPE" property="jobtype" jdbcType="VARCHAR" />
+			<result column="LIMIT" property="limit" jdbcType="DECIMAL" />
+			<result column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+			<!-- 对部门表的映射 -->
+			<association property="dept" javaType="com.hr.entity.Dept">
+				<id column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+				<result column="name1" property="name" jdbcType="VARCHAR" />
+				<result column="TYPE" property="type" jdbcType="VARCHAR" />
+				<result column="TELE" property="tele" jdbcType="VARCHAR" />
+				<result column="FAX" property="fax" jdbcType="VARCHAR" />
+				<result column="DISCRIP" property="discrip" jdbcType="VARCHAR" />
+				<result column="SUPERID" property="superid" jdbcType="DECIMAL" />
+				<result column="CREATETIME" property="createtime" jdbcType="DATE" />
+			</association>
+
+		</association>
+
+	</resultMap>
+
+	<select id="selectStaffAndEmp" parameterType="java.lang.Integer" resultMap="StaffAndEmpAndJobAndDept">
+		select
+		emp.*,
+		dept.deptid,
+		dept.name as name1,
+		staff.jobid,
+		job.jobname
+		from
+		staff left outer join emp
+		on staff.empid=emp.empid
+		left outer join job left outer join
+		dept on job.deptid=dept.deptid
+		on staff.jobid=job.jobid
+		where emp.empid=#{empid}
+	</select>
+</mapper>

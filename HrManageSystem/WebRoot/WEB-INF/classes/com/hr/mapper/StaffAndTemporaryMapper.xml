@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.StaffAndTemporaryMapper" >
+<resultMap id="staffAndTemporary" type="com.hr.entity.StaffAndTemporary" >
+    <result column="BEGINTIME" property="begintime" jdbcType="DATE" />
+    <result column="ENDTIME" property="endtime" jdbcType="DATE" />
+    <result column="EMPID" property="empid" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="dept_name" property="deptname" jdbcType="VARCHAR" />
+    <result column="jobname" property="jobname" jdbcType="VARCHAR" />
+    <result column="TIME" property="time" jdbcType="DATE" />
+
+ 
+  </resultMap>
+  
+  <select id="selectStaffByquery" parameterType="com.hr.entity.QueryS" resultMap="staffAndTemporary">
+  	<bind name="pattern" value="'%' + name + '%'" />
+  	<bind name="pattern2" value="'%' + deptname + '%'" />
+    select staff.time,emp.empid,emp.name,job.jobname,dept.name dept_name,
+    	temporary.begintime,temporary.endtime,temporary.result
+    	from staff left outer join emp on staff.empid=emp.empid
+    	left outer join temporary on staff.empid=temporary.empid
+    	left outer join job on staff.jobid=job.jobid 
+    	left outer join dept on job.deptid=dept.deptid
+		 where 1=1  and (result='转正' or result is null)
+        <if test="empid != null ">  
+            and emp.empid=#{empid}  
+        </if> 
+        <if test="name != '' ">
+            and emp.name like #{pattern}  
+        </if>   
+         <if test="deptname != '' ">  
+            and dept.name like #{pattern2}  
+        </if> 
+        <if test="time != null ">  
+            and staff.time=#{time}  
+        </if>   
+  </select>
+</mapper>

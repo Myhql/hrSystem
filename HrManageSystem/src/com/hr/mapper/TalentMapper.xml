@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.TalentMapper" >
+  <resultMap id="BaseResultMap" type="com.hr.entity.Talent" >
+    <id column="TALENTID" property="talentid" jdbcType="DECIMAL" />
+    <result column="EMPID" property="empid" jdbcType="DECIMAL" />
+    <result column="JOBID" property="jobid" jdbcType="DECIMAL" />
+    <result column="TIME" property="time" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    TALENTID, EMPID, JOBID, TIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hr.entity.TalentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from TALENT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from TALENT
+    where TALENTID = #{talentid,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from TALENT
+    where TALENTID = #{talentid,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hr.entity.TalentExample" >
+    delete from TALENT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hr.entity.Talent" >
+    insert into TALENT (TALENTID, EMPID, JOBID, 
+      TIME)
+    values (seq_talent_id.nextval, #{empid,jdbcType=DECIMAL}, #{jobid,jdbcType=DECIMAL}, 
+      #{time,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hr.entity.Talent" >
+    insert into TALENT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="talentid != null" >
+        TALENTID,
+      </if>
+      <if test="empid != null" >
+        EMPID,
+      </if>
+      <if test="jobid != null" >
+        JOBID,
+      </if>
+      <if test="time != null" >
+        TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="talentid != null" >
+        #{talentid,jdbcType=DECIMAL},
+      </if>
+      <if test="empid != null" >
+        #{empid,jdbcType=DECIMAL},
+      </if>
+      <if test="jobid != null" >
+        #{jobid,jdbcType=DECIMAL},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hr.entity.TalentExample" resultType="java.lang.Integer" >
+    select count(*) from TALENT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update TALENT
+    <set >
+      <if test="record.talentid != null" >
+        TALENTID = #{record.talentid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.empid != null" >
+        EMPID = #{record.empid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.jobid != null" >
+        JOBID = #{record.jobid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.time != null" >
+        TIME = #{record.time,jdbcType=DATE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update TALENT
+    set TALENTID = #{record.talentid,jdbcType=DECIMAL},
+      EMPID = #{record.empid,jdbcType=DECIMAL},
+      JOBID = #{record.jobid,jdbcType=DECIMAL},
+      TIME = #{record.time,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hr.entity.Talent" >
+    update TALENT
+    <set >
+      <if test="empid != null" >
+        EMPID = #{empid,jdbcType=DECIMAL},
+      </if>
+      <if test="jobid != null" >
+        JOBID = #{jobid,jdbcType=DECIMAL},
+      </if>
+      <if test="time != null" >
+        TIME = #{time,jdbcType=DATE},
+      </if>
+    </set>
+    where TALENTID = #{talentid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hr.entity.Talent" >
+    update TALENT
+    set EMPID = #{empid,jdbcType=DECIMAL},
+      JOBID = #{jobid,jdbcType=DECIMAL},
+      TIME = #{time,jdbcType=DATE}
+    where TALENTID = #{talentid,jdbcType=DECIMAL}
+  </update>
+</mapper>

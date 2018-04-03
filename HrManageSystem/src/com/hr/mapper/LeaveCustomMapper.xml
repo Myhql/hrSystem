@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.LeaveCustomMapper" >
+
+
+  <resultMap id="leaveAndEmpAndJobAndDept" type="com.hr.entity.Leave" >
+    <id column="LEAVEID" property="leaveid" jdbcType="DECIMAL" />
+    <result column="EMPID" property="empid" jdbcType="DECIMAL" />
+    <result column="JOBID" property="jobid" jdbcType="DECIMAL" />
+    <result column="PLACE" property="place" jdbcType="VARCHAR" />
+    <result column="TIME" property="time" jdbcType="DATE" />
+    <result column="REASON" property="reason" jdbcType="VARCHAR" />
+    <!-- 对员工表的映射 -->
+    <association property="emp" javaType="com.hr.entity.Emp">
+    	<!-- 因与上表列名冲突，编写 sql 语句时，该字段应重命名为 emp_id，否则分页查询会报“未明确定义列”错误 -->
+    	<id column="emp_id" property="empid" jdbcType="DECIMAL" />
+    	<!-- 编写 sql 语句时，该字段应重名民为 emp_name -->
+	    <result column="emp_name" property="name" jdbcType="VARCHAR" />
+	    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+	    <result column="BIR" property="bir" jdbcType="DATE" />
+	    <result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+	    <result column="TOWORKTIME" property="toworktime" jdbcType="DATE" />
+	    <result column="ZZMM" property="zzmm" jdbcType="VARCHAR" />
+	    <result column="NATIONAL" property="national" jdbcType="VARCHAR" />
+	    <result column="NATIVES" property="natives" jdbcType="VARCHAR" />
+	    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+	    <result column="MAIL" property="mail" jdbcType="VARCHAR" />
+	    <result column="HEIGHT" property="height" jdbcType="VARCHAR" />
+	    <result column="BLOODTYPE" property="bloodtype" jdbcType="VARCHAR" />
+	    <result column="BIRTHPLACE" property="birthplace" jdbcType="VARCHAR" />
+	    <result column="HKPLACE" property="hkplace" jdbcType="VARCHAR" />
+	    <result column="XL" property="xl" jdbcType="VARCHAR" />
+	    <result column="DEGREE" property="degree" jdbcType="VARCHAR" />
+	    <result column="GRADUATESCHOOL" property="graduateschool" jdbcType="VARCHAR" />
+	    <result column="PROFESSIONAL" property="professional" jdbcType="VARCHAR" />
+	    <result column="GRADUATETIME" property="graduatetime" jdbcType="DATE" />
+    </association>
+    <!-- 对岗位表的映射 -->
+    <association property="job" javaType="com.hr.entity.Job">
+        <!-- 编写 sql 语句时，该字段应重命名为 job_id -->
+    	<id column="job_id" property="jobid" jdbcType="DECIMAL" />
+	    <result column="JOBNAME" property="jobname" jdbcType="VARCHAR" />
+	    <result column="JOBTYPE" property="jobtype" jdbcType="VARCHAR" />
+	    <result column="LIMIT" property="limit" jdbcType="DECIMAL" />
+	    <result column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+    	<!-- 对部门表的映射 -->
+    	<association property="dept" javaType="com.hr.entity.Dept">
+    	    <!-- 编写 sql 语句时，该字段应重命名为 dept_id -->
+    	    <id column="dept_id" property="deptid" jdbcType="DECIMAL" />
+    	    <!-- 编写 sql 语句时，该字段应重命名为 dept_name -->
+		    <result column="dept_name" property="name" jdbcType="VARCHAR" />
+		    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+		    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+		    <result column="FAX" property="fax" jdbcType="VARCHAR" />
+		    <result column="DISCRIP" property="discrip" jdbcType="VARCHAR" />
+		    <result column="SUPERID" property="superid" jdbcType="DECIMAL" />
+		    <result column="CREATETIME" property="createtime" jdbcType="DATE" />
+    	</association>
+    	
+    </association>
+    
+  </resultMap>
+  
+  <select id="findRetireEmps" resultMap="leaveAndEmpAndJobAndDept"
+  		parameterType="com.hr.entity.LeaveCustom">
+	select
+	  leave.*,
+	  emp.empid emp_id,
+	  dept.name dept_name,
+	  job.jobname,
+	  emp.name emp_name,
+	  emp.sex
+	from
+	  leave
+	  left outer join emp
+	  on leave.empid=emp.empid
+	  left outer join job
+	  on leave.jobid=job.jobid
+	  left outer join dept
+	  on job.deptid=dept.deptid
+	where
+	  leave.time between #{begintime} and #{endtime}
+  	<if test="deptid != 0">
+  	  and dept.deptid = #{deptid}
+	</if>
+	order by emp.empid
+  </select>
+ 
+</mapper>

@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.ChangeMapper">
+	<resultMap id="BaseResultMap" type="com.hr.entity.Change">
+		<id column="CHANGEID" property="changeid" jdbcType="DECIMAL" />
+		<result column="OLDDEPT" property="olddept" jdbcType="VARCHAR" />
+		<result column="NEWDEPT" property="newdept" jdbcType="VARCHAR" />
+		<result column="DEPTTYPE" property="depttype" jdbcType="VARCHAR" />
+		<result column="DEPTREASON" property="deptreason" jdbcType="VARCHAR" />
+		<result column="DEPTTIME" property="depttime" jdbcType="DATE" />
+		<result column="OLDJOB" property="oldjob" jdbcType="VARCHAR" />
+		<result column="NEWJOB" property="newjob" jdbcType="VARCHAR" />
+		<result column="JOBTYPE" property="jobtype" jdbcType="VARCHAR" />
+		<result column="JOBREASON" property="jobreason" jdbcType="VARCHAR" />
+		<result column="JOBTIME" property="jobtime" jdbcType="DATE" />
+		<result column="EMPID" property="empid" jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		CHANGEID, OLDDEPT, NEWDEPT, DEPTTYPE, DEPTREASON, DEPTTIME, OLDJOB, NEWJOB,
+		JOBTYPE,
+		JOBREASON, JOBTIME, EMPID
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.hr.entity.ChangeExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from CHANGE
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from CHANGE
+		where CHANGEID = #{changeid,jdbcType=DECIMAL}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from CHANGE
+		where CHANGEID = #{changeid,jdbcType=DECIMAL}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.hr.entity.ChangeExample">
+		delete from CHANGE
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.hr.entity.Change">
+		insert into CHANGE (CHANGEID, OLDDEPT, NEWDEPT,
+		DEPTTYPE, DEPTREASON, DEPTTIME,
+		OLDJOB, NEWJOB, JOBTYPE,
+		JOBREASON, JOBTIME, EMPID
+		)
+		values (seq_change_id.nextval, #{olddept,jdbcType=VARCHAR},
+		#{newdept,jdbcType=VARCHAR},
+		#{depttype,jdbcType=VARCHAR}, #{deptreason,jdbcType=VARCHAR}, #{depttime,jdbcType=DATE},
+		#{oldjob,jdbcType=VARCHAR}, #{newjob,jdbcType=VARCHAR},
+		#{jobtype,jdbcType=VARCHAR},
+		#{jobreason,jdbcType=VARCHAR}, #{jobtime,jdbcType=DATE}, #{empid,jdbcType=DECIMAL}
+		)
+		
+		
+	</insert>
+	<insert id="insertSelective" parameterType="com.hr.entity.Change">
+		insert into CHANGE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="changeid != null">
+				CHANGEID,
+			</if>
+			<if test="olddept != null">
+				OLDDEPT,
+			</if>
+			<if test="newdept != null">
+				NEWDEPT,
+			</if>
+			<if test="depttype != null">
+				DEPTTYPE,
+			</if>
+			<if test="deptreason != null">
+				DEPTREASON,
+			</if>
+			<if test="depttime != null">
+				DEPTTIME,
+			</if>
+			<if test="oldjob != null">
+				OLDJOB,
+			</if>
+			<if test="newjob != null">
+				NEWJOB,
+			</if>
+			<if test="jobtype != null">
+				JOBTYPE,
+			</if>
+			<if test="jobreason != null">
+				JOBREASON,
+			</if>
+			<if test="jobtime != null">
+				JOBTIME,
+			</if>
+			<if test="empid != null">
+				EMPID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="changeid != null">
+				#{changeid,jdbcType=DECIMAL},
+			</if>
+			<if test="olddept != null">
+				#{olddept,jdbcType=VARCHAR},
+			</if>
+			<if test="newdept != null">
+				#{newdept,jdbcType=VARCHAR},
+			</if>
+			<if test="depttype != null">
+				#{depttype,jdbcType=VARCHAR},
+			</if>
+			<if test="deptreason != null">
+				#{deptreason,jdbcType=VARCHAR},
+			</if>
+			<if test="depttime != null">
+				#{depttime,jdbcType=DATE},
+			</if>
+			<if test="oldjob != null">
+				#{oldjob,jdbcType=VARCHAR},
+			</if>
+			<if test="newjob != null">
+				#{newjob,jdbcType=VARCHAR},
+			</if>
+			<if test="jobtype != null">
+				#{jobtype,jdbcType=VARCHAR},
+			</if>
+			<if test="jobreason != null">
+				#{jobreason,jdbcType=VARCHAR},
+			</if>
+			<if test="jobtime != null">
+				#{jobtime,jdbcType=DATE},
+			</if>
+			<if test="empid != null">
+				#{empid,jdbcType=DECIMAL},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.hr.entity.ChangeExample"
+		resultType="java.lang.Integer">
+		select count(*) from CHANGE
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update CHANGE
+		<set>
+			<if test="record.changeid != null">
+				CHANGEID = #{record.changeid,jdbcType=DECIMAL},
+			</if>
+			<if test="record.olddept != null">
+				OLDDEPT = #{record.olddept,jdbcType=VARCHAR},
+			</if>
+			<if test="record.newdept != null">
+				NEWDEPT = #{record.newdept,jdbcType=VARCHAR},
+			</if>
+			<if test="record.depttype != null">
+				DEPTTYPE = #{record.depttype,jdbcType=VARCHAR},
+			</if>
+			<if test="record.deptreason != null">
+				DEPTREASON = #{record.deptreason,jdbcType=VARCHAR},
+			</if>
+			<if test="record.depttime != null">
+				DEPTTIME = #{record.depttime,jdbcType=DATE},
+			</if>
+			<if test="record.oldjob != null">
+				OLDJOB = #{record.oldjob,jdbcType=VARCHAR},
+			</if>
+			<if test="record.newjob != null">
+				NEWJOB = #{record.newjob,jdbcType=VARCHAR},
+			</if>
+			<if test="record.jobtype != null">
+				JOBTYPE = #{record.jobtype,jdbcType=VARCHAR},
+			</if>
+			<if test="record.jobreason != null">
+				JOBREASON = #{record.jobreason,jdbcType=VARCHAR},
+			</if>
+			<if test="record.jobtime != null">
+				JOBTIME = #{record.jobtime,jdbcType=DATE},
+			</if>
+			<if test="record.empid != null">
+				EMPID = #{record.empid,jdbcType=DECIMAL},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update CHANGE
+		set CHANGEID = #{record.changeid,jdbcType=DECIMAL},
+		OLDDEPT = #{record.olddept,jdbcType=VARCHAR},
+		NEWDEPT = #{record.newdept,jdbcType=VARCHAR},
+		DEPTTYPE = #{record.depttype,jdbcType=VARCHAR},
+		DEPTREASON = #{record.deptreason,jdbcType=VARCHAR},
+		DEPTTIME = #{record.depttime,jdbcType=DATE},
+		OLDJOB = #{record.oldjob,jdbcType=VARCHAR},
+		NEWJOB = #{record.newjob,jdbcType=VARCHAR},
+		JOBTYPE = #{record.jobtype,jdbcType=VARCHAR},
+		JOBREASON = #{record.jobreason,jdbcType=VARCHAR},
+		JOBTIME = #{record.jobtime,jdbcType=DATE},
+		EMPID = #{record.empid,jdbcType=DECIMAL}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.hr.entity.Change">
+		update CHANGE
+		<set>
+			<if test="olddept != null">
+				OLDDEPT = #{olddept,jdbcType=VARCHAR},
+			</if>
+			<if test="newdept != null">
+				NEWDEPT = #{newdept,jdbcType=VARCHAR},
+			</if>
+			<if test="depttype != null">
+				DEPTTYPE = #{depttype,jdbcType=VARCHAR},
+			</if>
+			<if test="deptreason != null">
+				DEPTREASON = #{deptreason,jdbcType=VARCHAR},
+			</if>
+			<if test="depttime != null">
+				DEPTTIME = #{depttime,jdbcType=DATE},
+			</if>
+			<if test="oldjob != null">
+				OLDJOB = #{oldjob,jdbcType=VARCHAR},
+			</if>
+			<if test="newjob != null">
+				NEWJOB = #{newjob,jdbcType=VARCHAR},
+			</if>
+			<if test="jobtype != null">
+				JOBTYPE = #{jobtype,jdbcType=VARCHAR},
+			</if>
+			<if test="jobreason != null">
+				JOBREASON = #{jobreason,jdbcType=VARCHAR},
+			</if>
+			<if test="jobtime != null">
+				JOBTIME = #{jobtime,jdbcType=DATE},
+			</if>
+			<if test="empid != null">
+				EMPID = #{empid,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where CHANGEID = #{changeid,jdbcType=DECIMAL}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.hr.entity.Change">
+		update CHANGE
+		set OLDDEPT = #{olddept,jdbcType=VARCHAR},
+		NEWDEPT = #{newdept,jdbcType=VARCHAR},
+		DEPTTYPE = #{depttype,jdbcType=VARCHAR},
+		DEPTREASON = #{deptreason,jdbcType=VARCHAR},
+		DEPTTIME = #{depttime,jdbcType=DATE},
+		OLDJOB = #{oldjob,jdbcType=VARCHAR},
+		NEWJOB = #{newjob,jdbcType=VARCHAR},
+		JOBTYPE = #{jobtype,jdbcType=VARCHAR},
+		JOBREASON = #{jobreason,jdbcType=VARCHAR},
+		JOBTIME = #{jobtime,jdbcType=DATE},
+		EMPID = #{empid,jdbcType=DECIMAL}
+		where CHANGEID = #{changeid,jdbcType=DECIMAL}
+	</update>
+</mapper>

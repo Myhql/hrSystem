@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.HistoryMapper" >
+  <resultMap id="BaseResultMap" type="com.hr.entity.History" >
+    <id column="HISTORYID" property="historyid" jdbcType="DECIMAL" />
+    <result column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+    <result column="JOBID" property="jobid" jdbcType="DECIMAL" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="PEOPLE" property="people" jdbcType="DECIMAL" />
+    <result column="CHANGETIME" property="changetime" jdbcType="DATE" />
+    <result column="OLDPEOPLE" property="oldpeople" jdbcType="DECIMAL" />
+    <result column="NEWPEOPLE" property="newpeople" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <association property="job" javaType="com.hr.entity.Job">
+    	<id column="JOBID" property="jobid" jdbcType="DECIMAL" />
+	    <result column="JOBNAME" property="jobname" jdbcType="VARCHAR" />
+	    <result column="JOBTYPE" property="jobtype" jdbcType="VARCHAR" />
+	    <result column="LIMIT" property="limit" jdbcType="DECIMAL" />
+	    <result column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+    	<!-- 对部门表的映射 -->
+    	<association property="dept" javaType="com.hr.entity.Dept">
+    	    <id column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+		    <result column="NAME" property="name" jdbcType="VARCHAR" />
+		    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+		    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+		    <result column="FAX" property="fax" jdbcType="VARCHAR" />
+		    <result column="DISCRIP" property="discrip" jdbcType="VARCHAR" />
+		    <result column="SUPERID" property="superid" jdbcType="DECIMAL" />
+		    <result column="CREATETIME" property="createtime" jdbcType="DATE" />
+    	</association>	
+    </association> 
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    HISTORYID, DEPTID, JOBID, TYPE, PEOPLE, CHANGETIME, OLDPEOPLE, NEWPEOPLE, NAME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hr.entity.HistoryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from HISTORY
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from HISTORY
+    where HISTORYID = #{historyid,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from HISTORY
+    where HISTORYID = #{historyid,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hr.entity.HistoryExample" >
+    delete from HISTORY
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hr.entity.History" >
+    insert into HISTORY (HISTORYID, DEPTID, JOBID, 
+      TYPE, PEOPLE, CHANGETIME, 
+      OLDPEOPLE, NEWPEOPLE, NAME
+      )
+    values (seq_history_id.nextval, #{deptid,jdbcType=DECIMAL}, #{jobid,jdbcType=DECIMAL}, 
+      #{type,jdbcType=VARCHAR}, #{people,jdbcType=DECIMAL}, #{changetime,jdbcType=DATE}, 
+      #{oldpeople,jdbcType=DECIMAL}, #{newpeople,jdbcType=DECIMAL}, #{name,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hr.entity.History" >
+    insert into HISTORY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="historyid != null" >
+        HISTORYID,
+      </if>
+      <if test="deptid != null" >
+        DEPTID,
+      </if>
+      <if test="jobid != null" >
+        JOBID,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="people != null" >
+        PEOPLE,
+      </if>
+      <if test="changetime != null" >
+        CHANGETIME,
+      </if>
+      <if test="oldpeople != null" >
+        OLDPEOPLE,
+      </if>
+      <if test="newpeople != null" >
+        NEWPEOPLE,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="historyid != null" >
+        #{historyid,jdbcType=DECIMAL},
+      </if>
+      <if test="deptid != null" >
+        #{deptid,jdbcType=DECIMAL},
+      </if>
+      <if test="jobid != null" >
+        #{jobid,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="people != null" >
+        #{people,jdbcType=DECIMAL},
+      </if>
+      <if test="changetime != null" >
+        #{changetime,jdbcType=DATE},
+      </if>
+      <if test="oldpeople != null" >
+        #{oldpeople,jdbcType=DECIMAL},
+      </if>
+      <if test="newpeople != null" >
+        #{newpeople,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hr.entity.HistoryExample" resultType="java.lang.Integer" >
+    select count(*) from HISTORY
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update HISTORY
+    <set >
+      <if test="record.historyid != null" >
+        HISTORYID = #{record.historyid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.deptid != null" >
+        DEPTID = #{record.deptid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.jobid != null" >
+        JOBID = #{record.jobid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.type != null" >
+        TYPE = #{record.type,jdbcType=VARCHAR},
+      </if>
+      <if test="record.people != null" >
+        PEOPLE = #{record.people,jdbcType=DECIMAL},
+      </if>
+      <if test="record.changetime != null" >
+        CHANGETIME = #{record.changetime,jdbcType=DATE},
+      </if>
+      <if test="record.oldpeople != null" >
+        OLDPEOPLE = #{record.oldpeople,jdbcType=DECIMAL},
+      </if>
+      <if test="record.newpeople != null" >
+        NEWPEOPLE = #{record.newpeople,jdbcType=DECIMAL},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update HISTORY
+    set HISTORYID = #{record.historyid,jdbcType=DECIMAL},
+      DEPTID = #{record.deptid,jdbcType=DECIMAL},
+      JOBID = #{record.jobid,jdbcType=DECIMAL},
+      TYPE = #{record.type,jdbcType=VARCHAR},
+      PEOPLE = #{record.people,jdbcType=DECIMAL},
+      CHANGETIME = #{record.changetime,jdbcType=DATE},
+      OLDPEOPLE = #{record.oldpeople,jdbcType=DECIMAL},
+      NEWPEOPLE = #{record.newpeople,jdbcType=DECIMAL},
+      NAME = #{record.name,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hr.entity.History" >
+    update HISTORY
+    <set >
+      <if test="deptid != null" >
+        DEPTID = #{deptid,jdbcType=DECIMAL},
+      </if>
+      <if test="jobid != null" >
+        JOBID = #{jobid,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="people != null" >
+        PEOPLE = #{people,jdbcType=DECIMAL},
+      </if>
+      <if test="changetime != null" >
+        CHANGETIME = #{changetime,jdbcType=DATE},
+      </if>
+      <if test="oldpeople != null" >
+        OLDPEOPLE = #{oldpeople,jdbcType=DECIMAL},
+      </if>
+      <if test="newpeople != null" >
+        NEWPEOPLE = #{newpeople,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where HISTORYID = #{historyid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hr.entity.History" >
+    update HISTORY
+    set DEPTID = #{deptid,jdbcType=DECIMAL},
+      JOBID = #{jobid,jdbcType=DECIMAL},
+      TYPE = #{type,jdbcType=VARCHAR},
+      PEOPLE = #{people,jdbcType=DECIMAL},
+      CHANGETIME = #{changetime,jdbcType=DATE},
+      OLDPEOPLE = #{oldpeople,jdbcType=DECIMAL},
+      NEWPEOPLE = #{newpeople,jdbcType=DECIMAL},
+      NAME = #{name,jdbcType=VARCHAR}
+    where HISTORYID = #{historyid,jdbcType=DECIMAL}
+  </update>
+</mapper>

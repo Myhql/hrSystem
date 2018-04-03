@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hr.mapper.ManagerMapper">
+  <resultMap id="BaseResultMap" type="com.hr.entity.Manager">
+    <id column="MANAGERID" jdbcType="DECIMAL" property="managerid" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+    <result column="PASS" jdbcType="VARCHAR" property="pass" />
+    <result column="TELE" jdbcType="VARCHAR" property="tele" />
+    <result column="EMPID" jdbcType="DECIMAL" property="empid" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    MANAGERID, ACCOUNT, PASS, TELE, EMPID
+  </sql>
+  <select id="selectByExample" parameterType="com.hr.entity.ManagerExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from MANAGER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from MANAGER
+    where MANAGERID = #{managerid,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from MANAGER
+    where MANAGERID = #{managerid,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hr.entity.ManagerExample">
+    delete from MANAGER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hr.entity.Manager">
+    insert into MANAGER (MANAGERID, ACCOUNT, PASS, 
+      TELE, EMPID)
+    values (seq_manager_id.nextval, #{account,jdbcType=VARCHAR}, #{pass,jdbcType=VARCHAR}, 
+      #{tele,jdbcType=VARCHAR}, #{empid,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hr.entity.Manager">
+    insert into MANAGER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="managerid != null">
+        MANAGERID,
+      </if>
+      <if test="account != null">
+        ACCOUNT,
+      </if>
+      <if test="pass != null">
+        PASS,
+      </if>
+      <if test="tele != null">
+        TELE,
+      </if>
+      <if test="empid != null">
+        EMPID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="managerid != null">
+        #{managerid,jdbcType=DECIMAL},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pass != null">
+        #{pass,jdbcType=VARCHAR},
+      </if>
+      <if test="tele != null">
+        #{tele,jdbcType=VARCHAR},
+      </if>
+      <if test="empid != null">
+        #{empid,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hr.entity.ManagerExample" resultType="java.lang.Integer">
+    select count(*) from MANAGER
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update MANAGER
+    <set>
+      <if test="record.managerid != null">
+        MANAGERID = #{record.managerid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.account != null">
+        ACCOUNT = #{record.account,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pass != null">
+        PASS = #{record.pass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tele != null">
+        TELE = #{record.tele,jdbcType=VARCHAR},
+      </if>
+      <if test="record.empid != null">
+        EMPID = #{record.empid,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update MANAGER
+    set MANAGERID = #{record.managerid,jdbcType=DECIMAL},
+      ACCOUNT = #{record.account,jdbcType=VARCHAR},
+      PASS = #{record.pass,jdbcType=VARCHAR},
+      TELE = #{record.tele,jdbcType=VARCHAR},
+      EMPID = #{record.empid,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hr.entity.Manager">
+    update MANAGER
+    <set>
+      <if test="account != null">
+        ACCOUNT = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pass != null">
+        PASS = #{pass,jdbcType=VARCHAR},
+      </if>
+      <if test="tele != null">
+        TELE = #{tele,jdbcType=VARCHAR},
+      </if>
+      <if test="empid != null">
+        EMPID = #{empid,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where MANAGERID = #{managerid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hr.entity.Manager">
+    update MANAGER
+    set ACCOUNT = #{account,jdbcType=VARCHAR},
+      PASS = #{pass,jdbcType=VARCHAR},
+      TELE = #{tele,jdbcType=VARCHAR},
+      EMPID = #{empid,jdbcType=DECIMAL}
+    where MANAGERID = #{managerid,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.ChangeCustomMapper" >
+
+
+  <resultMap id="changeAndEmpAndJobAndDept" type="com.hr.entity.Change" >
+    <id column="CHANGEID" property="changeid" jdbcType="DECIMAL" />
+    <result column="OLDDEPT" property="olddept" jdbcType="VARCHAR" />
+    <result column="NEWDEPT" property="newdept" jdbcType="VARCHAR" />
+    <result column="DEPTTYPE" property="depttype" jdbcType="VARCHAR" />
+    <result column="DEPTREASON" property="deptreason" jdbcType="VARCHAR" />
+    <result column="DEPTTIME" property="depttime" jdbcType="DATE" />
+    <result column="OLDJOB" property="oldjob" jdbcType="VARCHAR" />
+    <result column="NEWJOB" property="newjob" jdbcType="VARCHAR" />
+    <result column="JOBTYPE" property="jobtype" jdbcType="VARCHAR" />
+    <result column="JOBREASON" property="jobreason" jdbcType="VARCHAR" />
+    <result column="JOBTIME" property="jobtime" jdbcType="DATE" />
+    <result column="EMPID" property="empid" jdbcType="DECIMAL" />
+    <!-- 对员工表的映射 -->
+    <association property="emp" javaType="com.hr.entity.Emp">
+    	<!-- 因与上表列名冲突，编写 sql 语句时，该字段应重命名为 emp_id，否则分页查询会报“未明确定义列”错误 -->
+    	<id column="emp_id" property="empid" jdbcType="DECIMAL" />
+    	<!-- 编写 sql 语句时，该字段应重名民为 emp_name -->
+	    <result column="emp_name" property="name" jdbcType="VARCHAR" />
+	    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+	    <result column="BIR" property="bir" jdbcType="DATE" />
+	    <result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+	    <result column="TOWORKTIME" property="toworktime" jdbcType="DATE" />
+	    <result column="ZZMM" property="zzmm" jdbcType="VARCHAR" />
+	    <result column="NATIONAL" property="national" jdbcType="VARCHAR" />
+	    <result column="NATIVES" property="natives" jdbcType="VARCHAR" />
+	    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+	    <result column="MAIL" property="mail" jdbcType="VARCHAR" />
+	    <result column="HEIGHT" property="height" jdbcType="VARCHAR" />
+	    <result column="BLOODTYPE" property="bloodtype" jdbcType="VARCHAR" />
+	    <result column="BIRTHPLACE" property="birthplace" jdbcType="VARCHAR" />
+	    <result column="HKPLACE" property="hkplace" jdbcType="VARCHAR" />
+	    <result column="XL" property="xl" jdbcType="VARCHAR" />
+	    <result column="DEGREE" property="degree" jdbcType="VARCHAR" />
+	    <result column="GRADUATESCHOOL" property="graduateschool" jdbcType="VARCHAR" />
+	    <result column="PROFESSIONAL" property="professional" jdbcType="VARCHAR" />
+	    <result column="GRADUATETIME" property="graduatetime" jdbcType="DATE" />
+    </association>
+
+  </resultMap>
+  
+  <select id="findChangeEmps" resultMap="changeAndEmpAndJobAndDept"
+  		parameterType="com.hr.entity.ChangeCustom">
+	
+	select
+	  change.*,<!-- 此处至少要取changeid，否则只会返回一条数据，试想是没有id无法区分change对象 -->
+	  emp.name emp_name,
+	  emp.sex
+	from
+	  change
+	  left outer join emp
+	  on change.empid=emp.empid
+	where
+	  change.jobtime between #{begintime} and #{endtime}
+ 	<!-- 部门调动员工查询 -->
+ 	<!-- 此处ognl表达式写 "deptOrJob=='dept'"会报错！！！！ -->
+  	<if test='deptOrJob=="dept"'>
+	  and change.olddept!=change.newdept
+	</if>
+	<!-- 岗位调动员工查询 -->
+	<if test='deptOrJob=="job"'>
+	  and change.oldjob!=change.newjob
+	</if>
+	order by emp.empid
+  </select>
+ 
+</mapper>

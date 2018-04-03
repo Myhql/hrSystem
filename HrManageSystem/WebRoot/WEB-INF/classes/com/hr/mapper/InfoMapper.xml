@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.InfoMapper" >
+  
+  <resultMap id="info" type="com.hr.entity.Info" >
+    <result column="SOURCE" property="source" jdbcType="VARCHAR" />
+    <association property="societyrelation" javaType="com.hr.entity.Societyrelation">
+	    <id column="SOCIETYRELATIONID" property="societyrelationid" jdbcType="DECIMAL" />
+	    <result column="RELATION" property="relation" jdbcType="VARCHAR" />
+	    <result column="s_name" property="name" jdbcType="VARCHAR" />
+	    <result column="JOB" property="job" jdbcType="VARCHAR" />
+	    <result column="POSI" property="posi" jdbcType="VARCHAR" />
+	    <result column="TEL" property="tel" jdbcType="VARCHAR" />
+	    <result column="EMPID" property="empid" jdbcType="DECIMAL" />
+	     
+	     <association property="emp" javaType="com.hr.entity.Emp">
+	    	<id column="empid" property="empid" jdbcType="DECIMAL" />
+		    <result column="name" property="name" jdbcType="VARCHAR" />
+		    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+		    <result column="BIR" property="bir" jdbcType="DATE" />
+		    <result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+		    <result column="TOWORKTIME" property="toworktime" jdbcType="DATE" />
+		    <result column="ZZMM" property="zzmm" jdbcType="VARCHAR" />
+		    <result column="NATIONAL" property="national" jdbcType="VARCHAR" />
+		    <result column="NATIVES" property="natives" jdbcType="VARCHAR" />
+		    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+		    <result column="MAIL" property="mail" jdbcType="VARCHAR" />
+		    <result column="HEIGHT" property="height" jdbcType="VARCHAR" />
+		    <result column="BLOODTYPE" property="bloodtype" jdbcType="VARCHAR" />
+		    <result column="BIRTHPLACE" property="birthplace" jdbcType="VARCHAR" />
+		    <result column="HKPLACE" property="hkplace" jdbcType="VARCHAR" />
+		    <result column="XL" property="xl" jdbcType="VARCHAR" />
+		    <result column="DEGREE" property="degree" jdbcType="VARCHAR" />
+		    <result column="GRADUATESCHOOL" property="graduateschool" jdbcType="VARCHAR" />
+		    <result column="PROFESSIONAL" property="professional" jdbcType="VARCHAR" />
+		    <result column="GRADUATETIME" property="graduatetime" jdbcType="DATE" />
+	    </association>
+    </association>
+    
+     <association property="occupationcareer" javaType="com.hr.entity.Occupationcareer">
+	 	<id column="OCCUPATIONCAREERID" property="occupationcareerid" jdbcType="DECIMAL" />
+	    <result column="BEGINTIME" property="begintime" jdbcType="DATE" />
+	    <result column="ENDTIME" property="endtime" jdbcType="DATE" />
+	    <result column="JOBNAME" property="jobname" jdbcType="VARCHAR" />
+	    <result column="JOBDISCRIP" property="jobdiscrip" jdbcType="VARCHAR" />
+	    <result column="POSITION" property="position" jdbcType="VARCHAR" />
+	    <result column="SALARY" property="salary" jdbcType="DECIMAL" />
+	    <result column="REFERENCE" property="reference" jdbcType="VARCHAR" />
+	    <result column="REFERENCEPOSITION" property="referenceposition" jdbcType="VARCHAR" />
+	    <result column="REFERENCETEL" property="referencetel" jdbcType="VARCHAR" />
+	    <result column="EMPID" property="empid" jdbcType="DECIMAL" />
+	     
+	      <association property="emp"  javaType="com.hr.entity.Emp">
+	    	<id column="empid" property="empid" jdbcType="DECIMAL" />
+		    <result column="name" property="name" jdbcType="VARCHAR" />
+		    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+		    <result column="BIR" property="bir" jdbcType="DATE" />
+		    <result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+		    <result column="TOWORKTIME" property="toworktime" jdbcType="DATE" />
+		    <result column="ZZMM" property="zzmm" jdbcType="VARCHAR" />
+		    <result column="NATIONAL" property="national" jdbcType="VARCHAR" />
+		    <result column="NATIVES" property="natives" jdbcType="VARCHAR" />
+		    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+		    <result column="MAIL" property="mail" jdbcType="VARCHAR" />
+		    <result column="HEIGHT" property="height" jdbcType="VARCHAR" />
+		    <result column="BLOODTYPE" property="bloodtype" jdbcType="VARCHAR" />
+		    <result column="BIRTHPLACE" property="birthplace" jdbcType="VARCHAR" />
+		    <result column="HKPLACE" property="hkplace" jdbcType="VARCHAR" />
+		    <result column="XL" property="xl" jdbcType="VARCHAR" />
+		    <result column="DEGREE" property="degree" jdbcType="VARCHAR" />
+		    <result column="GRADUATESCHOOL" property="graduateschool" jdbcType="VARCHAR" />
+		    <result column="PROFESSIONAL" property="professional" jdbcType="VARCHAR" />
+		    <result column="GRADUATETIME" property="graduatetime" jdbcType="DATE" />
+	    </association>
+    </association>
+  </resultMap>
+  
+  
+	
+	 <select id="selectStaffInfo" resultMap="info">
+	 select emp.*,staff.source,occupationcareer.*,
+	  societyrelation.societyrelationid,societyrelation.relation,
+	  societyrelation.name s_name,societyrelation.job,
+	  societyrelation.posi,societyrelation.tel,societyrelation.empid
+   from emp left outer join staff
+      on emp.empid=staff.empid 
+      left outer join occupationcareer
+      on emp.empid=occupationcareer.empid 
+       left outer join societyrelation
+      on emp.empid=societyrelation.empid 
+       where 1=1  
+        <if test="idCard != '' ">  
+            and emp.idcard=#{idCard}  
+        </if> 
+        <if test="empid != '' ">  
+            and staff.empid=#{empid}  
+        </if>   
+	</select>
+  
+  
+</mapper>

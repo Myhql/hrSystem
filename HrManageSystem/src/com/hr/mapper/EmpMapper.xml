@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.EmpMapper" >
+  <resultMap id="BaseResultMap" type="com.hr.entity.Emp" >
+    <id column="EMPID" property="empid" jdbcType="DECIMAL" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="BIR" property="bir" jdbcType="DATE" />
+    <result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+    <result column="TOWORKTIME" property="toworktime" jdbcType="DATE" />
+    <result column="ZZMM" property="zzmm" jdbcType="VARCHAR" />
+    <result column="NATIONAL" property="national" jdbcType="VARCHAR" />
+    <result column="NATIVES" property="natives" jdbcType="VARCHAR" />
+    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+    <result column="MAIL" property="mail" jdbcType="VARCHAR" />
+    <result column="HEIGHT" property="height" jdbcType="VARCHAR" />
+    <result column="BLOODTYPE" property="bloodtype" jdbcType="VARCHAR" />
+    <result column="BIRTHPLACE" property="birthplace" jdbcType="VARCHAR" />
+    <result column="HKPLACE" property="hkplace" jdbcType="VARCHAR" />
+    <result column="XL" property="xl" jdbcType="VARCHAR" />
+    <result column="DEGREE" property="degree" jdbcType="VARCHAR" />
+    <result column="GRADUATESCHOOL" property="graduateschool" jdbcType="VARCHAR" />
+    <result column="PROFESSIONAL" property="professional" jdbcType="VARCHAR" />
+    <result column="GRADUATETIME" property="graduatetime" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    EMPID, NAME, SEX, BIR, IDCARD, TOWORKTIME, ZZMM, NATIONAL, NATIVES, TELE, MAIL, HEIGHT, 
+    BLOODTYPE, BIRTHPLACE, HKPLACE, XL, DEGREE, GRADUATESCHOOL, PROFESSIONAL, GRADUATETIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hr.entity.EmpExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from EMP
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from EMP
+    where EMPID = #{empid,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from EMP
+    where EMPID = #{empid,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hr.entity.EmpExample" >
+    delete from EMP
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hr.entity.Emp" >
+    insert into EMP (EMPID, NAME, SEX, 
+      BIR, IDCARD, TOWORKTIME, 
+      ZZMM, NATIONAL, NATIVES, 
+      TELE, MAIL, HEIGHT, 
+      BLOODTYPE, BIRTHPLACE, HKPLACE, 
+      XL, DEGREE, GRADUATESCHOOL, 
+      PROFESSIONAL, GRADUATETIME)
+    values (seq_emp_id.nextval, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{bir,jdbcType=DATE}, #{idcard,jdbcType=VARCHAR}, #{toworktime,jdbcType=DATE}, 
+      #{zzmm,jdbcType=VARCHAR}, #{national,jdbcType=VARCHAR}, #{natives,jdbcType=VARCHAR}, 
+      #{tele,jdbcType=VARCHAR}, #{mail,jdbcType=VARCHAR}, #{height,jdbcType=VARCHAR}, 
+      #{bloodtype,jdbcType=VARCHAR}, #{birthplace,jdbcType=VARCHAR}, #{hkplace,jdbcType=VARCHAR}, 
+      #{xl,jdbcType=VARCHAR}, #{degree,jdbcType=VARCHAR}, #{graduateschool,jdbcType=VARCHAR}, 
+      #{professional,jdbcType=VARCHAR}, #{graduatetime,jdbcType=DATE})
+      <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="empid">
+		SELECT seq_emp_id.CURRVAL FROM DUAL
+	</selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.hr.entity.Emp" >
+    insert into EMP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="empid != null" >
+        EMPID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="sex != null" >
+        SEX,
+      </if>
+      <if test="bir != null" >
+        BIR,
+      </if>
+      <if test="idcard != null" >
+        IDCARD,
+      </if>
+      <if test="toworktime != null" >
+        TOWORKTIME,
+      </if>
+      <if test="zzmm != null" >
+        ZZMM,
+      </if>
+      <if test="national != null" >
+        NATIONAL,
+      </if>
+      <if test="natives != null" >
+        NATIVES,
+      </if>
+      <if test="tele != null" >
+        TELE,
+      </if>
+      <if test="mail != null" >
+        MAIL,
+      </if>
+      <if test="height != null" >
+        HEIGHT,
+      </if>
+      <if test="bloodtype != null" >
+        BLOODTYPE,
+      </if>
+      <if test="birthplace != null" >
+        BIRTHPLACE,
+      </if>
+      <if test="hkplace != null" >
+        HKPLACE,
+      </if>
+      <if test="xl != null" >
+        XL,
+      </if>
+      <if test="degree != null" >
+        DEGREE,
+      </if>
+      <if test="graduateschool != null" >
+        GRADUATESCHOOL,
+      </if>
+      <if test="professional != null" >
+        PROFESSIONAL,
+      </if>
+      <if test="graduatetime != null" >
+        GRADUATETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="empid != null" >
+        #{empid,jdbcType=DECIMAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="bir != null" >
+        #{bir,jdbcType=DATE},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="toworktime != null" >
+        #{toworktime,jdbcType=DATE},
+      </if>
+      <if test="zzmm != null" >
+        #{zzmm,jdbcType=VARCHAR},
+      </if>
+      <if test="national != null" >
+        #{national,jdbcType=VARCHAR},
+      </if>
+      <if test="natives != null" >
+        #{natives,jdbcType=VARCHAR},
+      </if>
+      <if test="tele != null" >
+        #{tele,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null" >
+        #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodtype != null" >
+        #{bloodtype,jdbcType=VARCHAR},
+      </if>
+      <if test="birthplace != null" >
+        #{birthplace,jdbcType=VARCHAR},
+      </if>
+      <if test="hkplace != null" >
+        #{hkplace,jdbcType=VARCHAR},
+      </if>
+      <if test="xl != null" >
+        #{xl,jdbcType=VARCHAR},
+      </if>
+      <if test="degree != null" >
+        #{degree,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateschool != null" >
+        #{graduateschool,jdbcType=VARCHAR},
+      </if>
+      <if test="professional != null" >
+        #{professional,jdbcType=VARCHAR},
+      </if>
+      <if test="graduatetime != null" >
+        #{graduatetime,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hr.entity.EmpExample" resultType="java.lang.Integer" >
+    select count(*) from EMP
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update EMP
+    <set >
+      <if test="record.empid != null" >
+        EMPID = #{record.empid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null" >
+        SEX = #{record.sex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bir != null" >
+        BIR = #{record.bir,jdbcType=DATE},
+      </if>
+      <if test="record.idcard != null" >
+        IDCARD = #{record.idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.toworktime != null" >
+        TOWORKTIME = #{record.toworktime,jdbcType=DATE},
+      </if>
+      <if test="record.zzmm != null" >
+        ZZMM = #{record.zzmm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.national != null" >
+        NATIONAL = #{record.national,jdbcType=VARCHAR},
+      </if>
+      <if test="record.natives != null" >
+        NATIVES = #{record.natives,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tele != null" >
+        TELE = #{record.tele,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mail != null" >
+        MAIL = #{record.mail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.height != null" >
+        HEIGHT = #{record.height,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bloodtype != null" >
+        BLOODTYPE = #{record.bloodtype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthplace != null" >
+        BIRTHPLACE = #{record.birthplace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hkplace != null" >
+        HKPLACE = #{record.hkplace,jdbcType=VARCHAR},
+      </if>
+      <if test="record.xl != null" >
+        XL = #{record.xl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.degree != null" >
+        DEGREE = #{record.degree,jdbcType=VARCHAR},
+      </if>
+      <if test="record.graduateschool != null" >
+        GRADUATESCHOOL = #{record.graduateschool,jdbcType=VARCHAR},
+      </if>
+      <if test="record.professional != null" >
+        PROFESSIONAL = #{record.professional,jdbcType=VARCHAR},
+      </if>
+      <if test="record.graduatetime != null" >
+        GRADUATETIME = #{record.graduatetime,jdbcType=DATE},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update EMP
+    set EMPID = #{record.empid,jdbcType=DECIMAL},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      SEX = #{record.sex,jdbcType=VARCHAR},
+      BIR = #{record.bir,jdbcType=DATE},
+      IDCARD = #{record.idcard,jdbcType=VARCHAR},
+      TOWORKTIME = #{record.toworktime,jdbcType=DATE},
+      ZZMM = #{record.zzmm,jdbcType=VARCHAR},
+      NATIONAL = #{record.national,jdbcType=VARCHAR},
+      NATIVES = #{record.natives,jdbcType=VARCHAR},
+      TELE = #{record.tele,jdbcType=VARCHAR},
+      MAIL = #{record.mail,jdbcType=VARCHAR},
+      HEIGHT = #{record.height,jdbcType=VARCHAR},
+      BLOODTYPE = #{record.bloodtype,jdbcType=VARCHAR},
+      BIRTHPLACE = #{record.birthplace,jdbcType=VARCHAR},
+      HKPLACE = #{record.hkplace,jdbcType=VARCHAR},
+      XL = #{record.xl,jdbcType=VARCHAR},
+      DEGREE = #{record.degree,jdbcType=VARCHAR},
+      GRADUATESCHOOL = #{record.graduateschool,jdbcType=VARCHAR},
+      PROFESSIONAL = #{record.professional,jdbcType=VARCHAR},
+      GRADUATETIME = #{record.graduatetime,jdbcType=DATE}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hr.entity.Emp" >
+    update EMP
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="bir != null" >
+        BIR = #{bir,jdbcType=DATE},
+      </if>
+      <if test="idcard != null" >
+        IDCARD = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="toworktime != null" >
+        TOWORKTIME = #{toworktime,jdbcType=DATE},
+      </if>
+      <if test="zzmm != null" >
+        ZZMM = #{zzmm,jdbcType=VARCHAR},
+      </if>
+      <if test="national != null" >
+        NATIONAL = #{national,jdbcType=VARCHAR},
+      </if>
+      <if test="natives != null" >
+        NATIVES = #{natives,jdbcType=VARCHAR},
+      </if>
+      <if test="tele != null" >
+        TELE = #{tele,jdbcType=VARCHAR},
+      </if>
+      <if test="mail != null" >
+        MAIL = #{mail,jdbcType=VARCHAR},
+      </if>
+      <if test="height != null" >
+        HEIGHT = #{height,jdbcType=VARCHAR},
+      </if>
+      <if test="bloodtype != null" >
+        BLOODTYPE = #{bloodtype,jdbcType=VARCHAR},
+      </if>
+      <if test="birthplace != null" >
+        BIRTHPLACE = #{birthplace,jdbcType=VARCHAR},
+      </if>
+      <if test="hkplace != null" >
+        HKPLACE = #{hkplace,jdbcType=VARCHAR},
+      </if>
+      <if test="xl != null" >
+        XL = #{xl,jdbcType=VARCHAR},
+      </if>
+      <if test="degree != null" >
+        DEGREE = #{degree,jdbcType=VARCHAR},
+      </if>
+      <if test="graduateschool != null" >
+        GRADUATESCHOOL = #{graduateschool,jdbcType=VARCHAR},
+      </if>
+      <if test="professional != null" >
+        PROFESSIONAL = #{professional,jdbcType=VARCHAR},
+      </if>
+      <if test="graduatetime != null" >
+        GRADUATETIME = #{graduatetime,jdbcType=DATE},
+      </if>
+    </set>
+    where EMPID = #{empid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hr.entity.Emp" >
+    update EMP
+    set NAME = #{name,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=VARCHAR},
+      BIR = #{bir,jdbcType=DATE},
+      IDCARD = #{idcard,jdbcType=VARCHAR},
+      TOWORKTIME = #{toworktime,jdbcType=DATE},
+      ZZMM = #{zzmm,jdbcType=VARCHAR},
+      NATIONAL = #{national,jdbcType=VARCHAR},
+      NATIVES = #{natives,jdbcType=VARCHAR},
+      TELE = #{tele,jdbcType=VARCHAR},
+      MAIL = #{mail,jdbcType=VARCHAR},
+      HEIGHT = #{height,jdbcType=VARCHAR},
+      BLOODTYPE = #{bloodtype,jdbcType=VARCHAR},
+      BIRTHPLACE = #{birthplace,jdbcType=VARCHAR},
+      HKPLACE = #{hkplace,jdbcType=VARCHAR},
+      XL = #{xl,jdbcType=VARCHAR},
+      DEGREE = #{degree,jdbcType=VARCHAR},
+      GRADUATESCHOOL = #{graduateschool,jdbcType=VARCHAR},
+      PROFESSIONAL = #{professional,jdbcType=VARCHAR},
+      GRADUATETIME = #{graduatetime,jdbcType=DATE}
+    where EMPID = #{empid,jdbcType=DECIMAL}
+  </update>
+  
+  <select id="selectIdByIdCard"  parameterType="java.lang.String" resultType="java.lang.Integer">
+		select empid from emp where idcard =${idcard}
+	</select>
+	
+</mapper>

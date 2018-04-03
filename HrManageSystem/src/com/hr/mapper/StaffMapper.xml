@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.StaffMapper" >
+  <resultMap id="BaseResultMap" type="com.hr.entity.Staff" >
+    <id column="STAFFID" property="staffid" jdbcType="DECIMAL" />
+    <result column="EMPID" property="empid" jdbcType="DECIMAL" />
+    <result column="JOBID" property="jobid" jdbcType="DECIMAL" />
+    <result column="TIME" property="time" jdbcType="DATE" />
+    <result column="SOURCE" property="source" jdbcType="VARCHAR" />
+    <!-- 对员工表的映射 -->
+    <association property="emp" javaType="com.hr.entity.Emp">
+    	<id column="emp_id" property="empid" jdbcType="DECIMAL" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+	    <result column="BIR" property="bir" jdbcType="DATE" />
+	    <result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+	    <result column="TOWORKTIME" property="toworktime" jdbcType="DATE" />
+	    <result column="ZZMM" property="zzmm" jdbcType="VARCHAR" />
+	    <result column="NATIONAL" property="national" jdbcType="VARCHAR" />
+	    <result column="NATIVES" property="natives" jdbcType="VARCHAR" />
+	    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+	    <result column="MAIL" property="mail" jdbcType="VARCHAR" />
+	    <result column="HEIGHT" property="height" jdbcType="VARCHAR" />
+	    <result column="BLOODTYPE" property="bloodtype" jdbcType="VARCHAR" />
+	    <result column="BIRTHPLACE" property="birthplace" jdbcType="VARCHAR" />
+	    <result column="HKPLACE" property="hkplace" jdbcType="VARCHAR" />
+	    <result column="XL" property="xl" jdbcType="VARCHAR" />
+	    <result column="DEGREE" property="degree" jdbcType="VARCHAR" />
+	    <result column="GRADUATESCHOOL" property="graduateschool" jdbcType="VARCHAR" />
+	    <result column="PROFESSIONAL" property="professional" jdbcType="VARCHAR" />
+	    <result column="GRADUATETIME" property="graduatetime" jdbcType="DATE" />
+    </association>
+    <!-- 对岗位表的映射 -->
+    <association property="job" javaType="com.hr.entity.Job">
+    	<id column="job_id" property="jobid" jdbcType="DECIMAL" />
+	    <result column="jobname" property="jobname" jdbcType="VARCHAR" />
+	    <result column="JOBTYPE" property="jobtype" jdbcType="VARCHAR" />
+	    <result column="LIMIT" property="limit" jdbcType="DECIMAL" />
+	    <result column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+    	<!-- 对部门表的映射 -->
+    	<association property="dept" javaType="com.hr.entity.Dept">
+    	    <id column="dept_id" property="deptid" jdbcType="DECIMAL" />
+		    <result column="dept_name" property="name" jdbcType="VARCHAR" />
+		    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+		    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+		    <result column="FAX" property="fax" jdbcType="VARCHAR" />
+		    <result column="DISCRIP" property="discrip" jdbcType="VARCHAR" />
+		    <result column="SUPERID" property="superid" jdbcType="DECIMAL" />
+		    <result column="CREATETIME" property="createtime" jdbcType="DATE" />
+    	</association>	
+    </association> 
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    STAFFID, EMPID, JOBID, TIME, SOURCE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hr.entity.StaffExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from STAFF
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from STAFF
+    where STAFFID = #{staffid,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from STAFF
+    where STAFFID = #{staffid,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hr.entity.StaffExample" >
+    delete from STAFF
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hr.entity.Staff" >
+    insert into STAFF (STAFFID, EMPID, JOBID, 
+      TIME, SOURCE)
+    values (seq_staff_id.nextval, #{empid,jdbcType=DECIMAL}, #{jobid,jdbcType=DECIMAL}, 
+      #{time,jdbcType=DATE}, #{source,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hr.entity.Staff" >
+    insert into STAFF
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="staffid != null" >
+        STAFFID,
+      </if>
+      <if test="empid != null" >
+        EMPID,
+      </if>
+      <if test="jobid != null" >
+        JOBID,
+      </if>
+      <if test="time != null" >
+        TIME,
+      </if>
+      <if test="source != null" >
+        SOURCE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="staffid != null" >
+        #{staffid,jdbcType=DECIMAL},
+      </if>
+      <if test="empid != null" >
+        #{empid,jdbcType=DECIMAL},
+      </if>
+      <if test="jobid != null" >
+        #{jobid,jdbcType=DECIMAL},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=DATE},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hr.entity.StaffExample" resultType="java.lang.Integer" >
+    select count(*) from STAFF
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update STAFF
+    <set >
+      <if test="record.staffid != null" >
+        STAFFID = #{record.staffid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.empid != null" >
+        EMPID = #{record.empid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.jobid != null" >
+        JOBID = #{record.jobid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.time != null" >
+        TIME = #{record.time,jdbcType=DATE},
+      </if>
+      <if test="record.source != null" >
+        SOURCE = #{record.source,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update STAFF
+    set STAFFID = #{record.staffid,jdbcType=DECIMAL},
+      EMPID = #{record.empid,jdbcType=DECIMAL},
+      JOBID = #{record.jobid,jdbcType=DECIMAL},
+      TIME = #{record.time,jdbcType=DATE},
+      SOURCE = #{record.source,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hr.entity.Staff" >
+    update STAFF
+    <set >
+      <if test="empid != null" >
+        EMPID = #{empid,jdbcType=DECIMAL},
+      </if>
+      <if test="jobid != null" >
+        JOBID = #{jobid,jdbcType=DECIMAL},
+      </if>
+      <if test="time != null" >
+        TIME = #{time,jdbcType=DATE},
+      </if>
+      <if test="source != null" >
+        SOURCE = #{source,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where STAFFID = #{staffid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hr.entity.Staff" >
+    update STAFF
+    set EMPID = #{empid,jdbcType=DECIMAL},
+      JOBID = #{jobid,jdbcType=DECIMAL},
+      TIME = #{time,jdbcType=DATE},
+      SOURCE = #{source,jdbcType=VARCHAR}
+    where STAFFID = #{staffid,jdbcType=DECIMAL}
+  </update>
+<update id="updatePrimaryKey" parameterType="int">
+		update staff
+		set
+		JOBID = #{jobid}
+		where empid= #{empid}
+	</update>
+	<select id="staffemp" parameterType="int" resultType="int">
+		select count(*) from staff where jobid=#{jobid}
+	</select>
+	  <select id="selectSourceByEmpId"  parameterType="java.lang.Integer" resultType="java.lang.String">
+		select s.source from emp e left outer join staff s 
+			on e.empid=s.empid 
+			where s.empid=#{empid}
+	</select>
+	
+	<select id="selectCountByJobId"  parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(*) from staff where staff.jobid=#{jobid}
+	</select>
+	
+	<select id="selectSTByquery" parameterType="com.hr.entity.QueryL1" resultMap="BaseResultMap">
+  	<bind name="pattern" value="'%' + name + '%'" />
+  	<bind name="pattern2" value="'%' + deptname + '%'" />
+  	select staff.*,emp.empid emp_id,emp.name,emp.idcard,emp.sex,emp.bir,emp.toworktime,emp.zzmm,
+  	emp.national,emp.natives,emp.tele,emp.mail,emp.height,emp.bloodtype,emp.birthplace,emp.xl,emp.hkplace,
+  	emp.degree,emp.graduateschool,emp.professional,emp.graduatetime,
+  	job.jobid job_id,job.jobname,dept.deptid dept_id,dept.name dept_name 
+		from staff left outer join emp on staff.empid=emp.empid
+		left outer join job on staff.jobid=job.jobid 
+		left outer join dept on job.deptid=dept.deptid
+		 where 1=1  
+        <if test="empid != null ">  
+            and emp.empid=#{empid}  
+        </if> 
+        <if test="name != '' ">
+            and emp.name like #{pattern}  
+        </if>   
+         <if test="deptid != null ">  
+            and dept.deptid=#{deptid}  
+        </if> 
+        <if test="deptname != '' ">  
+            and dept.name like #{pattern2}  
+        </if>   
+  	</select>
+  	
+ <delete id="deleteByEmpid" parameterType="java.lang.Integer" >
+    delete from STAFF
+    where EMPID = #{empid,jdbcType=DECIMAL}
+  </delete>
+  
+	
+</mapper>

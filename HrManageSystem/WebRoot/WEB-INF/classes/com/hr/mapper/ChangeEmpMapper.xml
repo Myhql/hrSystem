@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.ChangeEmpMapper">
+	<resultMap id="selectChange" type="com.hr.entity.Change">
+		<id column="CHANGEID" property="changeid" jdbcType="DECIMAL" />
+		<result column="OLDDEPT" property="olddept" jdbcType="VARCHAR" />
+		<result column="NEWDEPT" property="newdept" jdbcType="VARCHAR" />
+		<result column="DEPTTYPE" property="depttype" jdbcType="VARCHAR" />
+		<result column="DEPTREASON" property="deptreason" jdbcType="VARCHAR" />
+		<result column="DEPTTIME" property="depttime" jdbcType="DATE" />
+		<result column="OLDJOB" property="oldjob" jdbcType="VARCHAR" />
+		<result column="NEWJOB" property="newjob" jdbcType="VARCHAR" />
+		<result column="JOBTYPE" property="jobtype" jdbcType="VARCHAR" />
+		<result column="JOBREASON" property="jobreason" jdbcType="VARCHAR" />
+		<result column="JOBTIME" property="jobtime" jdbcType="DATE" />
+		<result column="EMPID" property="empid" jdbcType="DECIMAL" />
+		<association property="emp" javaType="com.hr.entity.Emp">
+			<id column="EMPID" property="empid" jdbcType="DECIMAL" />
+			<result column="NAME" property="name" jdbcType="VARCHAR" />
+		</association>
+	</resultMap>
+
+	<select id="selectAllChange" resultMap="selectChange"
+		parameterType="com.hr.entity.QueryExmapleVo" resultType="com.hr.entity.Change">
+		select
+		distinct
+		change.*,
+		emp.name
+		from
+		change left join emp on
+		change.empid =
+		emp.empid
+		<where>
+			<if test="change.empid!=null ">
+				and change.empid=#{change.empid}
+			</if>
+			<if test="name!='' ">
+				and name=#{name}
+			</if>
+			<if test="change.depttype!=null ">
+				and change.depttype=#{change.depttype}
+			</if>
+
+			<if test="change.jobtype!=null ">
+				and change.jobtype=#{change.jobtype}
+			</if>
+			<if test="begintime !=null ">
+				and change.jobtime>=#{begintime}
+			</if>
+			<if test="endtime !=null">
+				<![CDATA[ and change.jobtime <= #{endtime} ]]>
+			</if>
+		</where>
+	</select>
+
+</mapper>

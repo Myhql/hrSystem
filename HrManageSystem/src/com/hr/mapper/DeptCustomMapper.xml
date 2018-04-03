@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.DeptCustomMapper" >
+
+   <resultMap type="com.hr.entity.Dept" id="findAllDeptByPage">
+	    <id column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+	    <result column="NAME" property="name" jdbcType="VARCHAR" />
+	    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+	    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+	    <result column="FAX" property="fax" jdbcType="VARCHAR" />
+	    <result column="DISCRIP" property="discrip" jdbcType="VARCHAR" />
+	    <result column="SUPERID" property="superid" jdbcType="DECIMAL" />
+	    <result column="CREATETIME" property="createtime" jdbcType="DATE" /> 
+	    <association property="superdept" javaType="com.hr.entity.Dept">
+	       <id column="deptid" property="deptid"/>
+	       <result column="supername" property="name"/>
+	    </association>
+   </resultMap>
+   
+   <select id="findAllDeptByPage" resultMap="findAllDeptByPage">
+     select 
+           predept.deptid,
+           predept.name,
+           predept.type,
+           predept.tele,
+           predept.fax,
+           predept.discrip,
+           predept.createtime,
+           superdept.name as supername
+        from 
+           dept predept left outer join dept superdept  
+        on 
+           predept.superid=superdept.deptid
+   </select>
+   
+   <resultMap type="com.hr.entity.Staff" id="findAllStaffByDeptId">
+        <id column="STAFFID" property="staffid" jdbcType="DECIMAL" />
+	    <result column="EMPID" property="empid" jdbcType="DECIMAL" />
+	    <result column="JOBID" property="jobid" jdbcType="DECIMAL" />
+	    <result column="TIME" property="time" jdbcType="DATE" />
+	    <result column="SOURCE" property="source" jdbcType="VARCHAR" />
+	    <association property="job" javaType="com.hr.entity.Job">
+	        <id column="JOBID" property="jobid" jdbcType="DECIMAL" />
+		    <result column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+		    <association property="dept" javaType="com.hr.entity.Dept">
+		        <id column="DEPTID" property="deptid" jdbcType="DECIMAL" />
+			    <result column="NAME" property="name" jdbcType="VARCHAR" />
+		    </association>
+	    </association>
+   </resultMap>
+   <select id="findAllStaffByDeptId" parameterType="java.lang.Integer" resultMap="findAllStaffByDeptId">
+      select * 
+         from 
+            staff 
+         where 
+            jobid in (select jobid from job where deptid=#{deptid})
+   </select>
+   <resultMap type="com.hr.entity.Staff" id="findAllEmpFromDept">
+        <id column="STAFFID" property="staffid" jdbcType="DECIMAL" />
+	    <result column="staff_empid" property="empid" jdbcType="DECIMAL" />
+	    <result column="staff_jobid" property="jobid" jdbcType="DECIMAL" />
+	    <result column="TIME" property="time" jdbcType="DATE" />
+	    <result column="SOURCE" property="source" jdbcType="VARCHAR" />
+	    <association property="job" javaType="com.hr.entity.Job">
+	        <id column="jobid" property="jobid" jdbcType="DECIMAL" />
+		    <result column="job_deptid" property="deptid" jdbcType="DECIMAL" />
+		    <result column="jobname" property="jobname"/>
+		    <association property="dept" javaType="com.hr.entity.Dept">
+		        <id column="deptid" property="deptid" jdbcType="DECIMAL" />
+			    <result column="NAME" property="name" jdbcType="VARCHAR" />
+		    </association>
+	    </association>
+	    <association property="emp" javaType="com.hr.entity.Emp">
+	        <id column="empid" property="empid"/>
+	        <result column="emp_name" property="name"/>
+	        <result column="tele" property="tele"/>
+	    </association>
+   </resultMap>
+   <!-- 查询该部门下的所有员工 -->
+   <select id="findAllEmpFromDept" resultMap="findAllEmpFromDept" parameterType="java.lang.Integer">
+       select 
+             staff.staffid,
+             staff.empid staff_empid,
+             staff.jobid staff_jobid,
+             staff.time,
+             staff.source,
+             job.jobid,
+             job.jobname,
+             job.deptid job_deptid,
+             dept.deptid,
+             dept.name,
+             emp.name emp_name,
+             emp.empid,
+             emp.tele
+          from 
+             dept,emp,job,staff
+          where 
+             dept.deptid=job.deptid
+	         and staff.empid=emp.empid 
+	         and staff.jobid=job.jobid
+	         and dept.deptid=#{deptid}
+   </select>
+   
+   
+   <select id="findAllEmpCountFromDept" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+       select 
+             count(*)
+          from 
+             dept,emp,job,staff
+          where 
+             dept.deptid=job.deptid
+	         and staff.empid=emp.empid 
+	         and staff.jobid=job.jobid
+	         and dept.deptid=#{deptid}
+   </select>
+   
+   
+   
+   
+</mapper>

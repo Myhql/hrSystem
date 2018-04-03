@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.OccupationcareerMapper" >
+  <resultMap id="BaseResultMap" type="com.hr.entity.Occupationcareer" >
+    <id column="OCCUPATIONCAREERID" property="occupationcareerid" jdbcType="DECIMAL" />
+    <result column="BEGINTIME" property="begintime" jdbcType="DATE" />
+    <result column="ENDTIME" property="endtime" jdbcType="DATE" />
+    <result column="JOBNAME" property="jobname" jdbcType="VARCHAR" />
+    <result column="JOBDISCRIP" property="jobdiscrip" jdbcType="VARCHAR" />
+    <result column="POSITION" property="position" jdbcType="VARCHAR" />
+    <result column="SALARY" property="salary" jdbcType="DECIMAL" />
+    <result column="REFERENCE" property="reference" jdbcType="VARCHAR" />
+    <result column="REFERENCEPOSITION" property="referenceposition" jdbcType="VARCHAR" />
+    <result column="REFERENCETEL" property="referencetel" jdbcType="VARCHAR" />
+    <result column="EMPID" property="empid" jdbcType="DECIMAL" />
+     
+      <association property="emp">
+    	<id column="EMPID" property="empid" jdbcType="DECIMAL" />
+	    <result column="NAME" property="name" jdbcType="VARCHAR" />
+	    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+	    <result column="BIR" property="bir" jdbcType="DATE" />
+	    <result column="IDCARD" property="idcard" jdbcType="VARCHAR" />
+	    <result column="TOWORKTIME" property="toworktime" jdbcType="DATE" />
+	    <result column="ZZMM" property="zzmm" jdbcType="VARCHAR" />
+	    <result column="NATIONAL" property="national" jdbcType="VARCHAR" />
+	    <result column="NATIVES" property="natives" jdbcType="VARCHAR" />
+	    <result column="TELE" property="tele" jdbcType="VARCHAR" />
+	    <result column="MAIL" property="mail" jdbcType="VARCHAR" />
+	    <result column="HEIGHT" property="height" jdbcType="VARCHAR" />
+	    <result column="BLOODTYPE" property="bloodtype" jdbcType="VARCHAR" />
+	    <result column="BIRTHPLACE" property="birthplace" jdbcType="VARCHAR" />
+	    <result column="HKPLACE" property="hkplace" jdbcType="VARCHAR" />
+	    <result column="XL" property="xl" jdbcType="VARCHAR" />
+	    <result column="DEGREE" property="degree" jdbcType="VARCHAR" />
+	    <result column="GRADUATESCHOOL" property="graduateschool" jdbcType="VARCHAR" />
+	    <result column="PROFESSIONAL" property="professional" jdbcType="VARCHAR" />
+	    <result column="GRADUATETIME" property="graduatetime" jdbcType="DATE" />
+    </association>
+  </resultMap>
+  
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    OCCUPATIONCAREERID, BEGINTIME, ENDTIME, JOBNAME, JOBDISCRIP, POSITION, SALARY, REFERENCE, 
+    REFERENCEPOSITION, REFERENCETEL, EMPID
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hr.entity.OccupationcareerExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from OCCUPATIONCAREER
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from OCCUPATIONCAREER
+    where OCCUPATIONCAREERID = #{occupationcareerid,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from OCCUPATIONCAREER
+    where OCCUPATIONCAREERID = #{occupationcareerid,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.hr.entity.OccupationcareerExample" >
+    delete from OCCUPATIONCAREER
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.hr.entity.Occupationcareer" >
+    insert into OCCUPATIONCAREER (OCCUPATIONCAREERID, BEGINTIME, ENDTIME, 
+      JOBNAME, JOBDISCRIP, POSITION, 
+      SALARY, REFERENCE, REFERENCEPOSITION, 
+      REFERENCETEL, EMPID)
+    values (seq_occupationcareer_id.nextval, #{begintime,jdbcType=DATE}, #{endtime,jdbcType=DATE}, 
+      #{jobname,jdbcType=VARCHAR}, #{jobdiscrip,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
+      #{salary,jdbcType=DECIMAL}, #{reference,jdbcType=VARCHAR}, #{referenceposition,jdbcType=VARCHAR}, 
+      #{referencetel,jdbcType=VARCHAR}, #{empid,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hr.entity.Occupationcareer" >
+    insert into OCCUPATIONCAREER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="occupationcareerid != null" >
+        OCCUPATIONCAREERID,
+      </if>
+      <if test="begintime != null" >
+        BEGINTIME,
+      </if>
+      <if test="endtime != null" >
+        ENDTIME,
+      </if>
+      <if test="jobname != null" >
+        JOBNAME,
+      </if>
+      <if test="jobdiscrip != null" >
+        JOBDISCRIP,
+      </if>
+      <if test="position != null" >
+        POSITION,
+      </if>
+      <if test="salary != null" >
+        SALARY,
+      </if>
+      <if test="reference != null" >
+        REFERENCE,
+      </if>
+      <if test="referenceposition != null" >
+        REFERENCEPOSITION,
+      </if>
+      <if test="referencetel != null" >
+        REFERENCETEL,
+      </if>
+      <if test="empid != null" >
+        EMPID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="occupationcareerid != null" >
+        #{occupationcareerid,jdbcType=DECIMAL},
+      </if>
+      <if test="begintime != null" >
+        #{begintime,jdbcType=DATE},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=DATE},
+      </if>
+      <if test="jobname != null" >
+        #{jobname,jdbcType=VARCHAR},
+      </if>
+      <if test="jobdiscrip != null" >
+        #{jobdiscrip,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="salary != null" >
+        #{salary,jdbcType=DECIMAL},
+      </if>
+      <if test="reference != null" >
+        #{reference,jdbcType=VARCHAR},
+      </if>
+      <if test="referenceposition != null" >
+        #{referenceposition,jdbcType=VARCHAR},
+      </if>
+      <if test="referencetel != null" >
+        #{referencetel,jdbcType=VARCHAR},
+      </if>
+      <if test="empid != null" >
+        #{empid,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.hr.entity.OccupationcareerExample" resultType="java.lang.Integer" >
+    select count(*) from OCCUPATIONCAREER
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update OCCUPATIONCAREER
+    <set >
+      <if test="record.occupationcareerid != null" >
+        OCCUPATIONCAREERID = #{record.occupationcareerid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.begintime != null" >
+        BEGINTIME = #{record.begintime,jdbcType=DATE},
+      </if>
+      <if test="record.endtime != null" >
+        ENDTIME = #{record.endtime,jdbcType=DATE},
+      </if>
+      <if test="record.jobname != null" >
+        JOBNAME = #{record.jobname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jobdiscrip != null" >
+        JOBDISCRIP = #{record.jobdiscrip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.position != null" >
+        POSITION = #{record.position,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salary != null" >
+        SALARY = #{record.salary,jdbcType=DECIMAL},
+      </if>
+      <if test="record.reference != null" >
+        REFERENCE = #{record.reference,jdbcType=VARCHAR},
+      </if>
+      <if test="record.referenceposition != null" >
+        REFERENCEPOSITION = #{record.referenceposition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.referencetel != null" >
+        REFERENCETEL = #{record.referencetel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.empid != null" >
+        EMPID = #{record.empid,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update OCCUPATIONCAREER
+    set OCCUPATIONCAREERID = #{record.occupationcareerid,jdbcType=DECIMAL},
+      BEGINTIME = #{record.begintime,jdbcType=DATE},
+      ENDTIME = #{record.endtime,jdbcType=DATE},
+      JOBNAME = #{record.jobname,jdbcType=VARCHAR},
+      JOBDISCRIP = #{record.jobdiscrip,jdbcType=VARCHAR},
+      POSITION = #{record.position,jdbcType=VARCHAR},
+      SALARY = #{record.salary,jdbcType=DECIMAL},
+      REFERENCE = #{record.reference,jdbcType=VARCHAR},
+      REFERENCEPOSITION = #{record.referenceposition,jdbcType=VARCHAR},
+      REFERENCETEL = #{record.referencetel,jdbcType=VARCHAR},
+      EMPID = #{record.empid,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hr.entity.Occupationcareer" >
+    update OCCUPATIONCAREER
+    <set >
+      <if test="begintime != null" >
+        BEGINTIME = #{begintime,jdbcType=DATE},
+      </if>
+      <if test="endtime != null" >
+        ENDTIME = #{endtime,jdbcType=DATE},
+      </if>
+      <if test="jobname != null" >
+        JOBNAME = #{jobname,jdbcType=VARCHAR},
+      </if>
+      <if test="jobdiscrip != null" >
+        JOBDISCRIP = #{jobdiscrip,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        POSITION = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="salary != null" >
+        SALARY = #{salary,jdbcType=DECIMAL},
+      </if>
+      <if test="reference != null" >
+        REFERENCE = #{reference,jdbcType=VARCHAR},
+      </if>
+      <if test="referenceposition != null" >
+        REFERENCEPOSITION = #{referenceposition,jdbcType=VARCHAR},
+      </if>
+      <if test="referencetel != null" >
+        REFERENCETEL = #{referencetel,jdbcType=VARCHAR},
+      </if>
+      <if test="empid != null" >
+        EMPID = #{empid,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where OCCUPATIONCAREERID = #{occupationcareerid,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hr.entity.Occupationcareer" >
+    update OCCUPATIONCAREER
+    set BEGINTIME = #{begintime,jdbcType=DATE},
+      ENDTIME = #{endtime,jdbcType=DATE},
+      JOBNAME = #{jobname,jdbcType=VARCHAR},
+      JOBDISCRIP = #{jobdiscrip,jdbcType=VARCHAR},
+      POSITION = #{position,jdbcType=VARCHAR},
+      SALARY = #{salary,jdbcType=DECIMAL},
+      REFERENCE = #{reference,jdbcType=VARCHAR},
+      REFERENCEPOSITION = #{referenceposition,jdbcType=VARCHAR},
+      REFERENCETEL = #{referencetel,jdbcType=VARCHAR},
+      EMPID = #{empid,jdbcType=DECIMAL}
+    where OCCUPATIONCAREERID = #{occupationcareerid,jdbcType=DECIMAL}
+  </update>
+  
+</mapper>

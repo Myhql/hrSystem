@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hr.mapper.MonthReportMapper" >
+
+<!-- 过滤版.v1-->
+	<!-- 当月部门月初/月末人数-->
+  	<select id="getMonthEmpNum" resultType="com.hr.entity.MonthReportResult"
+  		parameterType="com.hr.entity.MonthReportPara">
+
+		SELECT 
+		    t2.deptid,t2.name deptname,sum(people)<if test="beginOrEnd=='begin'">monthBeginEmpNum</if> 
+				  						<if test="beginOrEnd=='end'">monthEndEmpNum</if> 
+		FROM
+		    (select 
+		      t1.deptid,t1.name,t1.jobid,t1.people,t1.changetime
+		      ,ROW_NUMBER()  over(partition by t1.deptid,t1.jobid order by t1.changetime desc) rn
+		    from 
+		        (SELECT
+		          dept.deptid,dept.name,history.jobid,
+		          history.people,history.changetime
+		        FROM 
+		          history
+		          LEFT OUTER JOIN dept
+		          ON dept.deptid=history.deptid
+		        WHERE history.changetime<![CDATA[ <= ]]>to_date(#{monthStr},'yyyy-mm')) t1) t2
+		          					<!-- 没有dd字段，默认为1,则月份参数值表示：月初/值+1：下月初（本月末） -->
+		WHERE t2.rn=1
+		GROUP BY t2.deptid,t2.name
+		ORDER BY t2.deptid
+  	</select>
+  	
+  	<!-- 当月部门员工变化人数 [newEmpNum]-->
+  	<select id="getChangeEmpNum" resultType="com.hr.entity.MonthReportResult"
+  		parameterType="com.hr.entity.MonthReportPara">
+		
+		select
+		  dept.name deptname,dept.deptid,count(*)
+		  <if test="type=='入职'">newEmpNum</if> 
+		  <if test="type=='离职'">retireEmpNum</if> 
+		  <if test="type=='调入'">inEmpNum</if> 
+		  <if test="type=='调出'">outEmpNum</if> 
+		from
+		  history
+		  LEFT OUTER JOIN dept
+		  ON history.deptid=dept.deptid
+		where
+		    to_char(history.changetime,'yyyy')=#{selyear}
+		    AND to_char(history.changetime,'mm')=#{selmonth}
+		    AND history.type=#{type}
+		group by dept.name,dept.deptid
+		order by deptid
+  	</select>
+  	
+  	
+   	<!-- 当月部门员工各学历人数 -->
+  	<select id="getXlNum" resultType="com.hr.entity.MonthReportResult"
+  		parameterType="com.hr.entity.MonthReportPara">
+		
+		select
+		  deptjoblist.deptid,deptjoblist.deptname,count(*) 
+		  <if test="xl=='研究生'">yanjiushengNum</if>
+		  <if test="xl=='本科'">benkeNum</if>
+		  <if test="xl=='大专'">dazhuanNum</if>
+		  <if test="xl=='高中以下'">gaozhongNum</if>
+		from
+		  staff,
+		  emp,(SELECT
+		        deptlist.deptid,deptlist.deptname,job.jobid
+		      FROM
+		        job,(SELECT
+		              history.deptid,
+		              dept.name deptname
+		            FROM 
+		              history
+		              left outer join dept
+		              on history.deptid=dept.deptid
+		            WHERE
+		            	to_char(history.changetime,'yyyy')=#{selyear}
+		            	AND to_char(history.changetime,'mm')=#{selmonth}
+		            GROUP BY history.deptid,dept.name) deptlist
+		       WHERE job.deptid=deptlist.deptid) deptjoblist 
+		where
+		  staff.jobid=deptjoblist.jobid
+		  and staff.empid=emp.empid
+		  and emp.xl=#{xl}<!-- 研究生、本科、大专、高中以下 -->
+		group by deptjoblist.deptid,deptjoblist.deptname
+		order by deptid
+  	</select>
+
+
+
+<!--=====================================================-->
+<!--=====================================================-->
+<!--=====================================================-->
+<!-- 未过滤版.v2-->
+	<!-- 当月部门月初/月末人数-->
+  	<select id="getMonthEmpNum" resultType="com.hr.entity.MonthReportResult"
+  		parameterType="com.hr.entity.MonthReportPara">
+
+		SELECT 
+		    t2.deptid,t2.name deptname,sum(people)<if test="beginOrEnd=='begin'">monthBeginEmpNum</if> 
+		  							<if test="beginOrEnd=='end'">monthEndEmpNum</if> 
+		FROM
+		    (select 
+		      t1.deptid,t1.name,t1.jobid,t1.people,t1.changetime
+		      ,ROW_NUMBER()  over(partition by t1.deptid,t1.jobid order by t1.changetime desc) rn
+		    from 
+		        (SELECT
+		          dept.deptid,dept.name,history.jobid,
+		          NVL(history.people,'0') people,
+		          NVL(history.changetime,to_date('2000-01-01','yyyy-mm-dd')) changetime
+		        FROM 
+		          dept
+		          LEFT OUTER JOIN history
+		          ON dept.deptid=history.deptid) t1
+		    where t1.changetime<![CDATA[ <= ]]>to_date(#{monthStr},'yyyy-mm')) t2
+		          						<!-- 没有dd字段，默认为1,则月份参数值表示：月初/值+1：下月初（本月末） -->
+		WHERE t2.rn=1
+		GROUP BY t2.deptid,t2.name,rn
+		ORDER BY t2.deptid
+  	</select>
+  	
+  	<!-- 当月部门员工变化人数 [newEmpNum]-->
+  	<select id="getChangeEmpNum" resultType="com.hr.entity.MonthReportResult"
+  		parameterType="com.hr.entity.MonthReportPara">
+		
+		select deptid,name deptname,sum(typecount)
+			  <if test="type=='入职'">newEmpNum</if> 
+			  <if test="type=='离职'">retireEmpNum</if> 
+			  <if test="type=='调入'">inEmpNum</if> 
+			  <if test="type=='调出'">outEmpNum</if> 
+		from
+		    (select deptid,name,count(type) typecount
+		    from
+		      (select
+		        dept.deptid,dept.name,decode(history.type,#{type},history.type,'') type
+		      from                                   <!-- 操作类型:入职、离职、调入、调出 -->
+		        history
+		        LEFT OUTER JOIN dept
+		        ON history.deptid=dept.deptid
+		      where
+		          to_char(history.changetime,'yyyy')=#{selyear}
+		    	  AND to_char(history.changetime,'mm')=#{selmonth}) t
+		    group by deptid,name,type)
+		group by deptid,name
+		order by deptid
+  	</select>
+  	
+   	<!-- 当月部门员工各学历人数 -->
+  	<select id="getXlNum" resultType="com.hr.entity.MonthReportResult"
+  		parameterType="com.hr.entity.MonthReportPara">
+		
+		select deptid,deptname,sum(countxl)
+			<if test="xl=='研究生'">yanjiushengNum</if>
+		  	<if test="xl=='本科'">benkeNum</if>
+		 	<if test="xl=='大专'">dazhuanNum</if>
+		  	<if test="xl=='高中以下'">gaozhongNum</if>
+		from
+		    (select deptid,deptname,xl,count(xl) countxl
+		    from 
+		        (SELECT
+		          deptjoblist.deptid,deptjoblist.deptname,decode(xl,#{xl},xl,'') xl
+		        from									<!-- 研究生、本科、大专、高中以下 -->
+		          staff,
+		          emp,(SELECT
+		                deptlist.deptid,deptlist.deptname,job.jobid
+		              FROM
+		                job,(SELECT
+		                      history.deptid,
+		                      dept.name deptname
+		                    FROM 
+		                      history
+		                      left outer join dept
+		                      on history.deptid=dept.deptid
+		                    WHERE
+		                        to_char(history.changetime,'yyyy')=#{selyear}
+		            			AND to_char(history.changetime,'mm')=#{selmonth}
+		                    GROUP BY history.deptid,dept.name) deptlist
+		               WHERE job.deptid=deptlist.deptid) deptjoblist 
+		        where
+		          staff.jobid=deptjoblist.jobid
+		          and staff.empid=emp.empid)
+		    group by deptid,deptname,xl)
+		group by deptid,deptname
+		order by deptid
+  	</select>
+ 
+
+  	
+</mapper>
